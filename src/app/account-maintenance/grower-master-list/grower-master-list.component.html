@@ -1,0 +1,121 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+      <div class="row">
+        <!-- <mat-card class="wrap">
+          <mat-card-header>
+            <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+          </mat-card-header>
+        </mat-card> -->
+
+        <div class="col-md-12" style="margin-top:3px;">
+          <div class="content">
+            <div class="container-fluid">
+              <div class="row" style="width: 100%;">
+                <p class="page-title">
+                  {{pageTitle}}
+                </p>
+              </div>
+              <div class="row" style="width: 100%;">
+                <div class="col-xl-12">
+                  <div style="display: table">
+                    <!--Loading gif-->
+                    <div *ngIf="!accountsLoaded" style="display: table-row">
+                      Please wait while the grower master list loads
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                    </div>
+                    <div *ngIf="accountsLoaded" style="display: table-row">
+                      <button
+                        mat-raised-button
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        [matTooltip]="'Add a new misc grower'"
+                        [matTooltipPosition]="'above'"
+                        (click)="addMiscGrower()"
+                      >
+
+                      <mat-icon>add</mat-icon>
+                        Add Misc Grower
+                      </button>
+
+                      <button
+                        mat-raised-button
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        [disabled]="lockSync"
+                        [matTooltip]="'Retrieve any new growers from the MTECH system'"
+                        [matTooltipPosition]="'above'"
+                        (click)="syncGrowers()"
+                      >
+                      <mat-spinner
+                        *ngIf="lockSync"
+                        [diameter]="35"
+                        style="float:left;"
+                      ></mat-spinner>
+                      <mat-icon>cloud_download</mat-icon>
+                        Update Grower List
+                      </button>
+
+                      <button
+                        mat-raised-button
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        [disabled]="lockVendors"
+                        [matTooltip]="'Retrieve any new vendors from the AS/400'"
+                        [matTooltipPosition]="'above'"
+                        (click)="syncVendors()"
+                      >
+                      <mat-spinner
+                        *ngIf="lockVendors"
+                        [diameter]="35"
+                        style="float:left;"
+                      ></mat-spinner>
+                      <mat-icon>cloud_download</mat-icon>
+                        Update Vendor List
+                      </button>
+                    </div>
+
+
+
+                    <!--acount header info-->
+                    <!-- <div *ngIf="!loadingAccount" style="display: table-row" >
+                      <app-grower-account-header [id]="id"></app-grower-account-header>
+                    </div> -->
+
+
+
+
+                    <!--Account list -->
+                    <div *ngIf="accountsLoaded" style="display: table-row" >
+                      <ag-grid-angular
+                        #agGrid
+                        [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 180 }"
+                        class="ag-theme-material"
+                        [rowData]="accounts"
+                        [columnDefs]="columnDefs"
+                        (gridReady)="onGridReady($event)"
+                        [frameworkComponents]="frameworkComponents"
+                        [embedFullWidthRows]="true"
+                        [floatingFilter]="true"
+                        [animateRows]="true"
+                        [rowHeight]="45"
+                        [suppressHorizontalScroll]="true"
+                        [pagination]="true"
+                        [paginationAutoPageSize]="true"
+                        [modules]="modules">
+                      </ag-grid-angular>
+                    </div>
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

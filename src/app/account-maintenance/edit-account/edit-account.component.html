@@ -1,0 +1,220 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <perfect-scrollbar
+                        [autoPropagation]="true"
+                        [ngStyle]="{
+                          width: innerWidth * 0.95,
+                          height: 'calc(100vh - 150px)'
+                        }"
+            >
+              <div class="row" style="width: 100%;">
+                <div class="col-xl-12">
+                  <div style="display: table">
+                    <!--Loading gif-->
+                    <div *ngIf="loadingAccount" style="display: table-row">
+                      Please wait while your account information loads
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                    </div>
+                    <!-- header-->
+                    <div *ngIf="!loadingAccount" style="display: table-row">
+                      <app-grower-account-header [id]="account.growerId"></app-grower-account-header>
+                      <table style="width: 300px;">
+                        <tr>
+                          <td>Account Suffix</td>
+                          <td>{{account.accountSuffix}}</td>
+                        </tr>
+                        <tr>
+                          <td>Account Opened</td>
+                          <td>{{account.dateOpened | date: 'MM/dd/yyyy'}}</td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <form *ngIf="accountFormLoaded" [formGroup]="accountForm">
+                      <!--Unique Account Fields-->
+                      <div *ngIf="!loadingAccount && !accountTypeRegular">
+                        <mat-form-field appearance="outline" style="width: 400px !important" [floatLabel]="'always'">
+                          <mat-label>Date to start deducting from grower and/or charging interest</mat-label>
+                          <input name="DeductChargeInterestDate" formControlName="DeductChargeInterestDate" placeholder="Date to start deducting and/or charging interest"   matInput [matDatepicker]="picker" />
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="margin-left: 15px;width: 350px !important">
+                          <mat-label>Balance at which to begin deduction from grower</mat-label>
+                          <input type="text" currencyMask name="temp" matInput placeholder="Balance at which to begin deduction from grower" formControlName="BalanceGoalStartDeduction" >
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="margin-left: 15px; width: 120px !important">
+                          <mat-label>Interest Rate</mat-label>
+                          <input type="number" matInput placeholder="Interest Rate" formControlName="InterestRate" >
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="!loadingAccount && !accountTypeRegular">
+                        <span>Number of Flocks to Pay</span>
+                        <mat-form-field appearance="outline" style="margin-left: 15px;width: 120px !important">
+                          <mat-label>Remaining</mat-label>
+                          <input type="number" matInput placeholder="Remaining" formControlName="RemainingFlocks" >
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" style="margin-left: 15px;width: 120px !important">
+                          <mat-label>Original</mat-label>
+                          <input type="number" matInput placeholder="Original" formControlName="OriginalNoFlocks"  >
+                        </mat-form-field>
+                      </div>
+
+
+
+
+                      <!--financial-->
+                      <div *ngIf="!loadingAccount && !accountTypeRegular" style="display: table-row">
+                        <table style="width: 600px;">
+
+                          <tr>
+                            <td>Begin Year Balance</td>
+                            <td>{{account.beginYearBalance | currency: 'USD' }}</td>
+                            <td>Balance Forward</td>
+                            <td>{{account.balanceForward | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+
+                          </tr>
+                          <tr>
+                            <td>Current Charges</td>
+                            <td>{{account.currentCharges | currency: 'USD' }}</td>
+                            <td>Current Credit</td>
+                            <td>{{account.currentCredits | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+                            <td>Last Charge Date</td>
+                            <td>{{account.lastChargeDate | date: 'MM/dd/yyyy'}}</td>
+                            <td>Last Credit Date</td>
+                            <td>{{account.lastCreditDate | date: 'MM/dd/yyyy'}}</td>
+                          </tr>
+                          <tr>
+                            <td>Cash Advance</td>
+                            <td>{{account.cashAdvances | currency: 'USD' }}</td>
+
+                            <td>Amount Due</td>
+                            <td>{{account.amountDue | currency: 'USD' }}</td>
+                          </tr>
+                          <tr *ngIf="!accountTypeRegular">
+                            <td>Total YTD Interest Charged</td>
+                            <td>{{account.ytdinterestCharged | currency: 'USD' }}</td>
+                            <td>Total YTD Interest Paid</td>
+                            <td>{{account.ytdinterestPaid | currency: 'USD' }}</td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div *ngIf="!loadingAccount && accountTypeRegular" style="display: table-row">
+                        <table style="width: 600px;">
+
+                          <tr>
+                            <td>Begin Year Balance</td>
+                            <td>{{account.beginYearBalance | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+                            <td>Balance Forward</td>
+                            <td>{{account.balanceForward | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+
+                          </tr>
+                          <tr>
+                            <td>Current Charges</td>
+                            <td>{{account.currentCharges | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+                            <td>Current Credit</td>
+                            <td>{{account.currentCredits | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+                            <td>Last Charge Date</td>
+                            <td>{{account.lastChargeDate | date: 'MM/dd/yyyy'}}</td>
+                          </tr>
+                          <tr>
+                            <td>Last Credit Date</td>
+                            <td>{{account.lastCreditDate | date: 'MM/dd/yyyy'}}</td>
+                          </tr>
+                          <tr>
+                            <td>Cash Advance</td>
+                            <td>{{account.cashAdvances | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+                            <td>Amount Due</td>
+                            <td>{{account.amountDue | currency: 'USD' }}</td>
+                          </tr>
+                          <tr *ngIf="!accountTypeRegular">
+                            <td>Total YTD Interest Charged</td>
+                            <td>{{account.ytdinterestCharged | currency: 'USD' }}</td>
+                          </tr>
+                          <tr>
+                            <td>Total YTD Interest Paid</td>
+                            <td>{{account.ytdinterestPaid | currency: 'USD' }}</td>
+                          </tr>
+                        </table>
+                      </div>
+
+                      <!--Comments-->
+                      <div *ngIf="!loadingAccount" style="display: table-row; margin-top: 30px;">
+                        <mat-form-field appearance="outline" style="width: 600px;">
+                          <mat-label>Comments</mat-label>
+                          <textarea matInput placeholder="Comments" formControlName="Comments" rows="3"></textarea>
+                        </mat-form-field>
+
+                      </div>
+
+                    </form>
+
+                    <div *ngIf="!loadingAccount" style="display: table-row; margin-top: 30px;">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        color="warn"
+                        (click)="backToAccount()"
+                        [matTooltip]="'Return to the account list'"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-icon>undo</mat-icon>
+                        Back
+                      </button>
+                      <button
+                        mat-raised-button
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        (click)="saveChanges()"
+                        [matTooltip]="'Save account changes'"
+                        [matTooltipPosition]="'above'"
+                        appDisabledForRole="Grower Accounting Read Only"
+                      >
+                      <mat-icon>save</mat-icon>
+                        Save
+                      </button>
+                    </div>
+
+
+
+                  </div>
+                </div>
+              </div>
+            </perfect-scrollbar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

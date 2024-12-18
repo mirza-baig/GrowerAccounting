@@ -1,0 +1,28 @@
+<span *ngIf="params.value === 'Exported'" style="color: green;">
+  Exported<mat-icon class="icon">check</mat-icon>
+</span>
+<span *ngIf="params.value === 'Posted'" style="color: green;">
+  Posted<mat-icon class="icon">check</mat-icon>
+</span>
+<span *ngIf="params.value === 'Saved'" style="color: green;">
+  Saved<mat-icon class="icon">check</mat-icon>
+</span>
+<span *ngIf="params.value === 'Cancelled'" style="color: red;">
+  Cancelled<mat-icon class="icon">close</mat-icon>
+</span>
+<span *ngIf="params.value === 'Rejected'" style="color: red;">
+  Rejected<mat-icon class="icon">close</mat-icon>
+</span>
+<span *ngIf="params.value === 'Needs Review'" style="color: red;">
+  Needs Review<mat-icon class="icon">priority_high</mat-icon>
+</span>
+<span 
+  *ngIf="params.value !== 'Posted'
+  && params.value !== 'Exported'
+  && params.value !== 'Saved'
+  && params.value !== 'Cancelled'
+  && params.value !== 'Rejected'
+  && params.value !== 'Needs Review'"
+>
+  {{params.value}}
+</span>

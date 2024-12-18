@@ -1,0 +1,90 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!--Loading gif-->
+
+                  <!--acount header info-->
+                  <!-- <div *ngIf="!loadingAccount" style="display: table-row" >
+                    <app-grower-account-header [id]="id"></app-grower-account-header>
+                  </div> -->
+
+                <app-grower-selection-panel
+                  [widthpx]="innerWidth * 0.9"
+                  [heightpx]="innerHeight - 200"
+                  [startingId]="0"
+                  [lock]="false"
+                  [showAllGrowers]="true"
+                  [hideSelectAnother]="false"
+                  [settlementsOnly]="false"
+                  [filterIds]="null"
+
+                  (growerSelectedEvent)="onGrowerSelected($event)"
+                >
+                </app-grower-selection-panel>
+                <hr />
+                <app-account-search
+                  style="margin-top: 30px; margin-bottom: 30px;"
+                  *ngIf="isGrowerSelected"
+                  [id]="selectedGrower.id"
+                  (growerSelectedEvent)="onAccountSelected($event)"
+                >
+                </app-account-search>
+                <hr />
+
+                <div *ngIf="!transactionsLoaded && isGrowerSelected && isAccountSelected" style="display: table-row">
+                  Please wait while transaction information loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>
+
+
+
+                  <!--Account list -->
+                  <div *ngIf="transactionsLoaded && isGrowerSelected && isAccountSelected && accountTransactions.length > 0" style="display: table-row; margin-top: 30px !important;" >
+                    <ag-grid-angular
+                      #agGrid
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 300 }"
+                      class="ag-theme-material"
+                      [rowData]="accountTransactions"
+                      [columnDefs]="columnDefs"
+                      [embedFullWidthRows]="true"
+                      [animateRows]="true"
+                      [floatingFilter]="true"
+                      (gridReady)="onGridReady($event)"
+                      [suppressHorizontalScroll]="true"
+                      [pagination]="true"
+                      [paginationAutoPageSize]="true"
+                      [modules]="modules">
+                    </ag-grid-angular>
+                  </div>
+
+                  <div *ngIf="transactionsLoaded && isGrowerSelected && isAccountSelected && accountTransactions.length === 0" style="display: table-row" >
+                    <p>No transactions found for this account!</p>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

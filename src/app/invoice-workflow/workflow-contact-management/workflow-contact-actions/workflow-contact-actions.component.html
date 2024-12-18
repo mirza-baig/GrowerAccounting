@@ -1,0 +1,18 @@
+<!--New-->
+<span *ngIf="!params.data.isActive">
+  <button 
+    mat-raised-button
+    type="button"
+    color="fdblue" 
+    (click)="markAsActive()"
+    [matTooltip]="'Mark ' + contact.firstName + ' ' + contact.lastName + ' as the active approver for ' + contact.stage"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>play_arrow</mat-icon>
+    Set as Active Approver
+  </button>
+</span>
+
+<span *ngIf="params.data.isActive" style="font-weight: bold; color: green">
+  Current Approver
+</span>

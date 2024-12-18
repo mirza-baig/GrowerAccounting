@@ -1,0 +1,250 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!--Loading gif-->
+                  <div *ngIf="loadingAccount" style="display: table-row">
+                    Please wait while your account information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>
+
+                  <!--acount header info-->
+                  <div *ngIf="!loadingAccount" style="display: table-row" >
+                    <app-grower-account-header [id]="id"></app-grower-account-header>
+
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          Date Opened:
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          {{grower.initializeDate | date: 'MM/dd/yyyy' }}
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          Total AR Balance:
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          {{totalARBalance | currency: 'USD':'$':'0.0-0' }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          Last Settlement Date:
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          {{grower.lastSettlementDate | date: 'MM/dd/yyyy' }}
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          Total YTD Interest Charged:
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          {{ grower.ytdinterestCharged | currency: 'USD':'$':'0.0-0' }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          Last Statement Date:
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          {{grower.lastStatementDate | date: 'MM/dd/yyyy' }}
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          Total YTD Interest Paid:
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div style="display: table">
+                          {{ grower.ytdinterestPaid | currency: 'USD':'$':'0.0-0' }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <form *ngIf="!loadingAccount" [formGroup]="CommentsForm">
+                    <div  style="display: table-row; margin-top: 30px;">
+                      <mat-form-field style="width: 400px;">
+                        <textarea matInput placeholder="Comments" formControlName="Comments" rows="3"></textarea>
+                      </mat-form-field>
+                      <button
+                      mat-raised-button
+                      style="margin-left: 15px;"
+                      type="button"
+                      color="warn"
+                      (click)="backToHome()"
+                      [matTooltip]="'Return back to the grower master list'"
+                      [matTooltipPosition]="'above'"
+                    >
+                    <mat-icon>undo</mat-icon>
+                      Return to Master List
+                    </button>
+                    <button
+                      mat-raised-button
+                      style="margin-left: 15px;"
+                      type="button"
+                      color="fdblue"
+                      (click)="saveChanges()"
+                      [matTooltip]="'Save account changes'"
+                      [matTooltipPosition]="'above'"
+                      appDisabledForRole="Grower Accounting Read Only"
+                    >
+                    <mat-icon>save</mat-icon>
+                      Save
+                    </button>
+                    <button
+                      mat-raised-button
+                      style="margin-left: 15px;"
+                      type="button"
+                      color="fdblue"
+                      *ngIf="grower.status === 'Active'"
+                      (click)="addNewAccountModal = true"
+                      [matTooltip]="'Add a new account'"
+                      [matTooltipPosition]="'above'"
+                    >
+                    <mat-icon>add</mat-icon>
+                      Add New Account
+                    </button>
+                    <button
+                      *ngIf="grower.farmType !== 3 && !lockSettlements && grower.status === 'Active'"
+                      mat-raised-button
+                      style="margin-left: 15px;"
+                      type="button"
+                      color="fdblue"
+                      (click)="goToTransfer()"
+                      [matTooltip]="'Transfer funds to one of the grower accounts'"
+                      [matTooltipPosition]="'above'"
+                      appDisabledForRole="Grower Accounting Read Only"
+                    >
+                    <mat-icon>sync_alt</mat-icon>
+                      Transfer Funds To Account
+                    </button>
+                    </div>
+                  </form>
+
+
+
+
+
+                  <!--Account list -->
+                  <div *ngIf="!loadingAccount" style="display: table-row" >
+                    <ag-grid-angular
+                      #agGrid
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 300 }"
+                      class="ag-theme-material"
+                      [rowData]="grower.growerAccount"
+                      [columnDefs]="columnDefs"
+                      [floatingFilter]="true"
+                      [frameworkComponents]="frameworkComponents"
+                      (gridReady)="onGridReady($event)"
+                      [modules]="modules">
+                    </ag-grid-angular>
+                  </div>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="example-wrapper">
+    <kendo-dialog
+      *ngIf="addNewAccountModal"
+      (close)="addNewAccountModal = false"
+      [minWidth]="300"
+      [width]="300"
+      [height]="300"
+    >
+      <kendo-dialog-titlebar
+        style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+      >
+        <div
+          style="font-size: 18px; line-height: 1.3em; color: white !important;"
+        >
+          <span class="k-icon k-i-notification"></span> New Account
+        </div>
+      </kendo-dialog-titlebar>
+      <p>&nbsp;</p>
+      <span style="margin-top: 50px !important">Select new account type</span>
+      <form [formGroup]="newAccountForm">
+        <div class="row" style="margin-top: 10px;">
+
+            <div style="display: table;" *ngIf="newAccountFormLoaded" [formGroup]="newAccountForm" >
+              <mat-form-field appearance="outline">
+                <mat-label>Account Type</mat-label>
+                <mat-select formControlName="AccountType" placeholder="Account" (selectionChange)="onAccountTypeChange()">
+                  <mat-option *ngFor="let item of accountTypes" [value]="item.id" >
+                    {{item.accountType}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+        </div>
+      </form>
+
+      <kendo-dialog-actions>
+        <button
+        mat-raised-button
+        color="warn"
+        style="width: 50% !important;"
+        (click)="addNewAccountModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!newAccountFormSelected"
+        style="width: 50% !important;"
+        (click)="submitAddNewAccountModal()"
+      >
+        Create New Account
+      </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+  </div>

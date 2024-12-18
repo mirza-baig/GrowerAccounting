@@ -1,0 +1,29 @@
+<span>
+  <button
+    mat-raised-button
+    *ngIf="!lockSettlements && params.data.transactionStatus !== 'Posted'"
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit this transaction'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>edit</mat-icon>
+  </button>
+</span>
+<span>
+  <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    *ngIf="!lockSettlements && params.data.transactionStatus !== 'Posted'"
+    type="button"
+    color="warn"
+    (click)="deleteTransaction()"
+    [matTooltip]="'Delete this transaction'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+</span>

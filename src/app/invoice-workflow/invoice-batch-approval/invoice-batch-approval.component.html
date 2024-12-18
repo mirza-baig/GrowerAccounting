@@ -1,0 +1,93 @@
+
+<!--show the header-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">
+                <!--Loading gif-->
+                <div [hidden]="invoicesLoaded"  style="display: table-row">
+                  Please wait while the batch loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>
+
+                <div [hidden]="!invoicesLoaded" style="display: table-row; margin-top: 30px;">
+                  Please review all of the invoice payment requests in this batch. You must view the invoice file first
+                  and then either select "Approve" with the green check mark <mat-icon style="color:green; padding-top: 15px !important;">check</mat-icon>
+                  or "Reject" with the red X <mat-icon style="color: red; padding-top: 15px !important;">close</mat-icon>.
+                  Rejections will require additional comments for clarification! You can also click the magnifying glass icon <mat-icon>search</mat-icon>
+                  to view more details about the individual payment request!
+                 </div>
+
+                <div [hidden]="!invoicesLoaded" style="display: table-row; margin-top: 30px;">
+
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoiceItems.length > 0"
+                    type="button"
+                    color="fdblue"
+                    [disabled]="submitted || incomplete"
+                    (click)="submitForApproval()"
+                    [matTooltip]="'Submit the invoice payment request batch for approval by LPO/Accounting'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-spinner
+                    *ngIf="submitted"
+                    [diameter]="35"
+                    style="float:right;"
+                  ></mat-spinner>
+                  <mat-icon>send</mat-icon>
+                    Complete Approvals
+                  </button>
+                </div>
+
+
+
+                <!--Account list -->
+                <div *ngIf="invoicesLoaded" style="display: table-row" >
+                  <ag-grid-angular
+                    #agGrid
+                    [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 250 }"
+                    class="ag-theme-material"
+                    [rowData]="invoiceItems"
+                    [columnDefs]="columnDefs"
+                    (gridReady)="onGridReady($event)"
+                    (rowDataUpdated)="onCellValueChange($event)"
+                    [frameworkComponents]="frameworkComponents"
+                    [floatingFilter]="true"
+                    [embedFullWidthRows]="true"
+                    [animateRows]="true"
+                    [suppressHorizontalScroll]="true"
+                    [pagination]="false"
+                    [paginationAutoPageSize]="false"
+                    [suppressRowTransform]="true"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

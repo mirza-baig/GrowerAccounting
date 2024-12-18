@@ -1,0 +1,9 @@
+<!-- <div class="container"> -->
+<mat-card class="wrap" [hidden]="hideAppHeader">
+    <mat-card-header>
+        <capx-header [moduleTitle]="module" #header></capx-header>
+    </mat-card-header>
+</mat-card>
+<router-outlet (activate)='onActivate($event)'></router-outlet>
+<div kendoDialogContainer></div>
+<!-- </div> -->

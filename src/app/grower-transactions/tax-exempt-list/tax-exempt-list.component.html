@@ -1,0 +1,130 @@
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">  
+                  
+                  <!--loading spinner-->
+                  <div *ngIf="!!!dateForm || !dropdownsLoaded" style="display: table-row">
+                    Please wait while the page loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>     
+
+                  <!--search form-->
+                  <div *ngIf="!!dateForm && dropdownsLoaded" style="display: table-row">
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <span>Please enter a date range to search for tax exempt transactions</span>
+                    </div>
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <form [formGroup]="dateForm">
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Start Date</mat-label>
+                              <input name="StartDate" formControlName="StartDate"   placeholder="Start Date"   matInput [matDatepicker]="startpicker"/>
+                              <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+                              <mat-datepicker #startpicker></mat-datepicker>
+                            </mat-form-field>  
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>End Date</mat-label>
+                              <input name="EndDate" formControlName="EndDate"   placeholder="End Date"   matInput [matDatepicker]="endpicker" />
+                              <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+                              <mat-datepicker #endpicker></mat-datepicker>
+                            </mat-form-field>  
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <button
+                        mat-raised-button
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        [disabled]="!dateForm.valid"
+                        (click)="submitDates()"
+                      >
+                      <mat-icon>search</mat-icon>
+                        Submit
+                      </button>
+                      <!--add buttons for export to excel, and print to pdf?-->
+                      <button
+                        mat-raised-button
+                        *ngIf="transactionsLoaded"
+                        style="margin-left: 10px;"
+                        type="button"
+                        color="fdblue"
+                        (click)="exportToExcel()"
+                      >
+                      <mat-icon>cloud_download</mat-icon>
+                        Export to Excel
+                      </button>
+                      <!-- <button
+                        mat-raised-button
+                        *ngIf="transactionsLoaded"
+                        style="margin: 10px;"
+                        type="button"
+                        color="fdblue"
+                        (click)="printTable()"
+                      >
+                      <mat-icon>print</mat-icon>
+                        Print
+                      </button> -->
+                    </div>
+                    
+                  </div>     
+                  
+
+                  <div *ngIf="!transactionsLoaded && datesSubmitted" style="display: table-row">
+                    Please wait while transaction information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>        
+                  
+
+
+                  <!--Transaction list -->
+                 
+                  <div *ngIf="transactionsLoaded && datesSubmitted" style="display: table-row" >
+                    <ag-grid-angular 
+                      #agGrid 
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 300 }"
+                      class="ag-theme-material"
+                      [rowData]="transactions" 
+                      [columnDefs]="columnDefs"
+                      [frameworkComponents]="frameworkComponents"
+                      [embedFullWidthRows]="true"
+                      [animateRows]="true"
+                      [floatingFilter]="true"
+                      (gridReady)="onGridReady($event)"
+                      [suppressHorizontalScroll]="true"
+                      [pagination]="true"
+                      [paginationAutoPageSize]="true"
+                      [modules]="modules">
+                    </ag-grid-angular>
+                  </div>         
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

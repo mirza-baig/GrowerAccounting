@@ -1,0 +1,68 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table" *ngIf="!success">
+                  
+                    <div style="display: table-row">
+                      This page is for resetting the database tables in the system so we can do a "fresh start" of the Grower AR system. As such we want to not be using this thing very often. So proceed with caution.
+                    </div>         
+                    <div style="display: table-row" *ngIf="!submitted">
+                      <button 
+                        mat-raised-button
+                        type="button"
+                        color="fdblue" 
+                        (click)="unlock = true"
+                      >
+                      <mat-icon>warning</mat-icon>
+                        Yes, please reset the database tables
+                      </button>
+                    </div>
+                    <div style="display: table-row;"  *ngIf="!submitted">
+                      <button 
+                        mat-raised-button
+                        style=" margin-top: 20px;"
+                        type="button"
+                        [disabled]="!unlock"
+                        color="warn" 
+                        (click)="submit()"
+                      >
+                      <mat-icon>priority_high</mat-icon>
+                        Yes, I am fully aware and need to reset the system
+                      </button>
+                    </div>
+                    <div style="display: table-row; " *ngIf="submitted">
+                      <p style="margin-top: 50px;">
+                        Please wait while the system reloads. This will take a while so go refill your coffee and stretch your legs out
+                      </p>
+                      
+                      <img
+                        src="../../assets/chicken_loading.gif"
+                        
+                      />
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

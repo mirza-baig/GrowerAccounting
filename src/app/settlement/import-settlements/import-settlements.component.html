@@ -1,0 +1,142 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+      <div class="row">
+        <!-- <mat-card class="wrap">
+          <mat-card-header>
+            <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+          </mat-card-header>
+        </mat-card> -->
+    
+        <div class="col-md-12" style="margin-top:3px;">
+          <div class="content">
+            <div class="container-fluid">
+              <div class="row" style="width: 100%;">
+                <p class="page-title">
+                  {{pageTitle}}
+                </p>
+              </div>
+              <div class="row" style="width: 100%;">
+                <div class="col-xl-12">
+                  <div style="display: table">                  
+                    <!--Loading gif-->
+                    <div *ngIf="!dateFormLoaded" style="display: table-row">
+                      Please wait while the page loads
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                    </div>        
+                    
+  
+                    <div *ngIf="dateFormLoaded">
+                      <div style="display: table-row; margin-bottom: 30px;">
+                        <h2>Broilers</h2>
+                      </div>
+                      <div style="display: table-row; margin-bottom: 30px;">
+                        <form [formGroup]="dateForm">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Broiler Settlement Date</mat-label>
+                            <input name="SettlementDate" formControlName="SettlementDate"   placeholder="Broiler Settlement Date"   matInput [matDatepicker]="picker"  (dateChange)="onDateChange($event)"  />
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>  
+
+                        </form>
+                      </div>
+                      <div *ngIf= "broilerSettlements" style="display: table-row; margin-bottom: 30px;">
+                        <mat-spinner
+                          *ngIf="lockBroilerImport"
+                          [diameter]="35"
+                          style="float:left;"
+                        ></mat-spinner>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="fdblue" 
+                          (click)="importBroilers()"
+                          [disabled]="!dateForm.valid || lockBroilerImport"
+                          [matTooltip]="'Import the Available Broiler Settlements'"
+                          [matTooltipPosition]="'above'"
+                          style="float:left;"
+                        >
+                          <mat-icon>cloud_upload</mat-icon>
+                          Import Broiler Settlements
+                          
+                        </button>   
+                      </div>
+                      <div style="display: table-row; margin-bottom: 30px;">
+                        &nbsp;
+                      </div>
+                      <div style="display: table-row; margin-bottom: 30px;">
+                        <h2>Breeders</h2>
+                      </div>
+                      <div *ngIf="!breederDatesLoaded" style="display: table-row">
+                        Please wait while valid fiscal periods are loaded
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.4 }" mode="indeterminate"></mat-progress-bar>
+                      </div>
+
+                      <div style="display: table-row" *ngIf="settlementDatesLoaded && breederDatesLoaded">
+                        <!-- <app-week-ending-date-picker
+                          [inputDate]="null"
+                          [filteredDates]="breederDates"
+                          [submitButtonText]="'Select Date'"
+                          (dateSelectedEvent)="onBreederDateSelection($event)"
+                        ></app-week-ending-date-picker> -->
+
+
+                        <form [formGroup]="periodForm">
+                          <p>
+                            Please select a fiscal period:
+                          </p>
+                          <mat-form-field appearance="outline">
+                            <mat-label>Fiscal Year</mat-label>
+                            <mat-select formControlName="Year" placeholder="Fiscal Year" (selectionChange)="onYearChange($event)" >                               
+                              <mat-option *ngFor="let item of breederYears" [value]="item" >
+                                {{ item }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field appearance="outline">
+                            <mat-label>Fiscal Period</mat-label>
+                            <mat-select formControlName="Period" placeholder="Fiscal Period" (selectionChange)="onPeriodChange($event)" > 
+                              <mat-option *ngFor="let item of breederPeriods" [value]="item" >
+                                {{ item }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field> 
+                        </form>
+
+                      </div>
+                      
+                      <div *ngIf= "breederSettlements" style="display: table-row; margin-bottom: 30px;">
+                        <mat-spinner
+                          *ngIf="lockBreederImport"
+                          [diameter]="35"
+                          style="float:left;"
+                        ></mat-spinner>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="fdblue" 
+                          (click)="importBreeders()"
+                          [disabled]="!breederDateSelected || lockBreederImport"
+                          [matTooltip]="'Import the Available Breeder Settlements'"
+                          [matTooltipPosition]="'above'"
+                          style="float:left;"
+                        >
+                          <mat-icon>cloud_upload</mat-icon>
+                          Import Breeder Settlements
+                          
+                        </button>
+                        
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    

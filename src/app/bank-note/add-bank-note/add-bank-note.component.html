@@ -1,0 +1,176 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+      <div class="row">
+        <!-- <mat-card class="wrap">
+          <mat-card-header>
+            <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+          </mat-card-header>
+        </mat-card> -->
+    
+        <div class="col-md-12" style="margin-top:3px;">
+          <div class="content">
+            <div class="container-fluid">
+              <div class="row" style="width: 100%;">
+                <p class="page-title">
+                  {{pageTitle}}
+                </p>
+              </div>
+              <div class="row" style="width: 100%;">
+                <div class="col-xl-12">
+                  <div style="display: table">                  
+                    <!--Loading gif-->
+                    <div *ngIf="!dropdownsLoaded || !bankNoteFormLoaded" style="display: table-row">
+                      Please wait while the page loads
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                    </div>        
+                    
+                    <!--farm search-->
+                    <div *ngIf="dropdownsLoaded && !!growerId" style="display: table-row" > 
+                      <app-grower-account-header [id]="growerId"></app-grower-account-header>
+                     
+                      
+                        
+                      
+                    </div>
+                    <!--Main Form-->
+                    <div  *ngIf="dropdownsLoaded && bankNoteFormLoaded" style="display: table-row; margin-top: 50px;">
+                      <form [formGroup]="bankNoteForm">
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Bank Vendor #</mat-label>
+                                <input type="number" matInput formControlName="VendorNumber" [formGroup]="bankNoteForm" (keyup)="vendorNumberSearch($event)" >
+                              </mat-form-field>  
+                            </div>
+                          </div>
+                          <div *ngIf="isVendorSelected" class="col-md-3">
+                            Selected Vendor: {{selectedVendor.vname}}
+                          </div>
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Loan Number</mat-label>
+                                <input type="text" name="LoanNumber" matInput placeholder="Loan Number" formControlName="LoanNumber"  >
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div>
+                        <!-- <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Principal Amount</mat-label>
+                                <input type="text" name="PrincipalAmount" currencyMask matInput placeholder="Principal Amount" formControlName="PrincipalAmount"  >
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label [matTooltip]="'This is the total of Principal + Interest'">Total Payments</mat-label>
+                                <input type="text" name="TotalPayments" currencyMask matInput placeholder="Total Payments" formControlName="TotalPayments"  >
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div>
+                        <div *ngIf="!isAdd" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Remaining Balance</mat-label>
+                                <input type="text" name="RemainingBalance" currencyMask matInput placeholder="Remaining Balance" formControlName="RemainingBalance" >
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div> -->
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <h2>Settlement</h2>
+                            </div>
+                          </div>                          
+                        </div>
+                        <div [hidden]="isBroiler" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Cents per Dozen</mat-label>
+                                <input type="number" name="CentsPerDozen" matInput placeholder="Cents Per Dozen" formControlName="CentsPerDozen" >
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Payment Amount</mat-label>
+                                <input type="text" currencyMask name="PaymentAmount" matInput placeholder="Payment Amount" formControlName="PaymentAmount" >
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Payment Terms</mat-label>
+                                <mat-select formControlName="NetProceeds" placeholder="Net Proceeds" > 
+                                  <mat-option *ngFor="let item of netProceedsList" [value]="item.Value" >
+                                    {{item.Text}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>  
+                            </div>
+                          </div>                          
+                        </div>   
+                        <!-- <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">                          
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="bankNoteForm" >
+                              <div >                                  
+                                <mat-checkbox style="margin-left: 10px;" formControlName="Status" value=''>Active</mat-checkbox>
+                              </div>
+                            </div>
+                          </div>                          
+                        </div> -->
+                      </form>
+                    </div>
+                    <!--Submit Button-->
+                    <div *ngIf="dropdownsLoaded && bankNoteFormLoaded" style="display: table-row; margin-top: 30px;">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        color="warn"
+                        (click)="returnHome()"
+                      >
+                      <mat-icon>undo</mat-icon>
+                        Return to Bank Note List
+                      </button>
+                      <button
+                        mat-raised-button
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        [disabled]="!bankNoteForm.valid || blockSubmit || !isVendorSelected"
+                        (click)="submitBankNote()"
+                      >
+                      <mat-icon>send</mat-icon>
+                        Submit
+                      </button>
+                    </div>  
+  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    

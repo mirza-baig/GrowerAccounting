@@ -1,0 +1,338 @@
+<div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" *ngIf="!isLoaded">
+  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.75 }" mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div *ngIf="isLoaded" class="row"  [ngStyle]="{ 'width.px' : innerWidth * 0.85 }">
+  <div class="col-md-6">
+    <!--req info-->
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      AP Invoice Information
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Farm
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{getGrowerName(fullModel.invoice.growerId)}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Vendor
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{getVendorName(fullModel.invoice.vendorId)}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Company
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{companyName}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Invoice Date
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{fullModel.invoice.invoiceDate | date: 'MM/dd/yyyy' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Amount
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ fullModel.invoice.amount | currency: 'USD' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Description
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ fullModel.invoice.description }}
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Account
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ account.accountType }}
+        </div>
+      </div>
+    </div> -->
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Status
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ fullModel.invoice.status }}
+        </div>
+      </div>
+    </div>
+
+
+  <!-- </div> -->
+
+  <!--todo - do we want the file here? -->
+
+  <!--distributions-->
+  <!-- <div class="col-md-6" *ngIf="distributions.length > 1"> -->
+    <div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        &nbsp;
+      </div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        GL Account Distributions
+      </div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        <div class="col-md-4">
+          <div style="display: table;">
+            GL Account
+          </div>
+        </div>
+        <!-- <div class="col-md-2">
+          <div style="display: table;">
+            Account
+          </div>
+        </div> -->
+        <!--todo - put the account here -->
+        <div class="col-md-2">
+          <div style="display: table;">
+            Amount
+          </div>
+        </div>
+      </div>
+      <div *ngFor="let dist of fullModel.glDistributions" class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+        <div class="col-md-4">
+          <div style="display: table;">
+            {{dist.glaccount.toString() + ' - ' + getGLAccount(dist.glaccount).glAccountName}}
+          </div>
+        </div>
+        <!-- <div class="col-md-2">
+          <div style="display: table;">
+            <app-quick-account-text [id]="dist."></app-quick-account-text>
+          </div>
+        </div> -->
+        <div class="col-md-2">
+          <div style="display: table;">
+            {{dist.amount | currency: 'USD'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoaded && !!fullModel.request" class="row"  [ngStyle]="{ 'width.px' : innerWidth * 0.85 }">
+  <div class="col-md-6">
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+      &nbsp;
+    </div>
+    <!--req info-->
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      AP Invoice Payment Request Information
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Farm
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{getGrowerName(fullModel.request.growerId)}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Vendor
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{getVendorName(fullModel.request.vendorId)}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Company
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{companyName}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Invoice Date
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{fullModel.request.invoiceDate | date: 'MM/dd/yyyy' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Amount
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ fullModel.request.amount | currency: 'USD' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Description
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ fullModel.request.description }}
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Account
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ account.accountType }}
+        </div>
+      </div>
+    </div> -->
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Status
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ fullModel.request.stage }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          File
+        </div>
+      </div>
+      <div class="col-md-4" *ngIf="!!fullModel.request.fileName">
+        <div style="display: table;">
+          <span style="cursor: pointer; text-decoration: underline;" (click)="displayFile()">
+            {{ fullModel.request.fileName }} <mat-icon>cloud_download</mat-icon>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4" *ngIf="!!!fullModel.request.fileName">
+        <div style="display: table;">
+          <span style="cursor: pointer; text-decoration: underline;" >
+            <b>No file included!</b>
+          </span>
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+
+  <!--todo - do we want the file here? -->
+
+  <!--distributions-->
+  <!-- <div class="col-md-6" *ngIf="distributions.length > 1"> -->
+    <div *ngIf="fullModel.growerDistributions.length > 1">
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        &nbsp;
+      </div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        Farm Distributions
+      </div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        <div class="col-md-4">
+          <div style="display: table;">
+            Farm
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div style="display: table;">
+            Account
+          </div>
+        </div>
+        <!--todo - put the account here -->
+        <div class="col-md-2">
+          <div style="display: table;">
+            Amount
+          </div>
+        </div>
+      </div>
+      <div *ngFor="let dist of fullModel.growerDistributions" class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+        <div class="col-md-4">
+          <div style="display: table;">
+            {{dist.growerName}}
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div style="display: table;">
+            {{dist.accountName}}
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div style="display: table;">
+            {{dist.amount | currency: 'USD'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

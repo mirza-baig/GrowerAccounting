@@ -1,0 +1,15 @@
+<span style="width: 120px;">
+  <button 
+    mat-raised-button
+    style="width: 120px;"
+    [hidden]="params.data.isLocked"
+    type="button"
+    color="fdblue" 
+    (click)="deleteDistribution()"
+    [matTooltip]="'Delete the GL account distribution'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>clear</mat-icon>
+    Delete
+  </button>
+</span>

@@ -1,0 +1,53 @@
+<button
+  [@sidenavAnimation]="this.sidenavState"
+  class="sidenav-button"
+  mat-mini-fab
+  color="primary"
+  (click)="tryToggleState()"
+>
+  <mat-icon *ngIf="sidenavOpened" [@leftChevronAnimation]="this.sidenavState"
+    >chevron_left</mat-icon
+  >
+  <mat-icon *ngIf="!sidenavOpened" [@rightChevronAnimation]="this.sidenavState"
+    >chevron_right</mat-icon
+  >
+</button>
+<mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav class="drawer" #sidenav mode="side" [opened]="sidenavOpened">
+    <mat-nav-list>
+      <div *ngFor="let category of reports; let catI = index">
+        <div *ngIf="category.Reports.length > 0">
+          <h1 mat-subheader>{{ category.Category }}</h1>
+          <div *ngFor="let report of category.Reports; let i = index">
+            <a mat-list-item (click)="handleSelectionChange(catI, i)">{{
+              report.Name
+            }}</a>
+          </div>
+          <br />
+          <br />
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div
+      class="col-md-12"
+      style="text-align: center; transform: translateY(50%); height: 100%;"
+      *ngIf="selectedReport === -1"
+      @fade
+    >
+      <h3>Select a report to view.</h3>
+    </div>
+    <div *ngIf="selectedReport !== -1" @fade>
+      <iframe
+        style="width: 100%; height: calc(100vh - 56px); border: none;"
+        [src]="
+          reports[selectedCategory].Reports[selectedReport].Url
+            | safe: 'resourceUrl'
+        "
+      ></iframe>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

@@ -1,0 +1,182 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div  *ngIf="!dropdownsLoaded && growerSelected" style="display: table-row">
+              Please wait while the information loads
+              <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+            </div> 
+            
+            <div *ngIf="dropdownsLoaded " class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">                  
+                  <div style="display: table-row" *ngIf="searchFormLoaded">
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <span>Please select criteria to search for invoices to view</span>
+                    </div>
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <div class="col-md-2">
+                        <form [formGroup]="searchForm">
+                          <mat-form-field appearance="outline" style="width: 200px;">
+                            <mat-label>Days Back From Today</mat-label>
+                            <mat-select formControlName="DaysBack" placeholder="Days Back From Today" > 
+                              <mat-option [value]="30" >30</mat-option>
+                              <mat-option [value]="45" >45</mat-option>
+                              <mat-option [value]="60" >60</mat-option>
+                              <mat-option [value]="90" >90</mat-option>
+                              <mat-option [value]="180" >180</mat-option>
+                              <mat-option [value]="365" >1 year</mat-option>
+                              <mat-option [value]="10000" >Show All Records</mat-option>
+                            </mat-select>
+                          </mat-form-field> 
+                        </form>
+                      </div>
+                      <div class="col-md-2">
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="fdblue"
+                          [disabled]="!!!searchForm.value.DaysBack"
+                          [matTooltip]="'Search for invoices'"
+                          [matTooltipPosition]="'above'"
+                          (click)="searchInvoices()"
+                        >
+                          <mat-icon>search</mat-icon>
+                          Search for Invoices
+                        </button>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <div *ngIf="!lockSettlements" style="display: table-row" >
+                    <button
+                      mat-raised-button
+                      type="button"
+                      color="fdblue"
+                      (click)="addInvoice()"
+                    >
+                      <mat-icon>add</mat-icon>
+                      Add Invoice
+                    </button>
+                  </div>
+                  <div  *ngIf="!invoicesLoaded && filterSubmitted" style="display: table-row">
+                    Please wait while the information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>
+                  
+                  <div *ngIf="lockSettlements" style="display: table-row" >
+                    There is currently a settlement batch in process, so it must be completed and posted before posting invoices.
+                  </div>
+                  
+                  <div *ngIf="invoicesLoaded" style="display: table-row" > 
+                    
+                    <ag-grid-angular 
+                      #agGrid 
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 270 }"
+                      class="ag-theme-material"
+                      [rowData]="invoiceItems" 
+                      [columnDefs]="colDefs"
+                      (gridReady)="onGridReady($event)"
+                      [frameworkComponents]="frameworkComponents"
+                      [floatingFilter]="true"
+                      [embedFullWidthRows]="true"
+                      [animateRows]="true"
+                      [suppressHorizontalScroll]="true"
+                      [rowSelection]="'multiple'"
+                      [pagination]="true"
+                      [suppressRowClickSelection]="true"
+                      [paginationAutoPageSize]="true"
+                      (selectionChanged)="onInvoiceSelectionChanged($event)"
+                      [modules]="modules">
+                    </ag-grid-angular>      
+                    
+                  </div>
+                  
+             
+
+                </div>
+              </div>
+            </div>
+
+            
+              
+
+           
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+  <div class="example-wrapper">
+    <kendo-dialog
+      *ngIf="newBatchModal"
+      (close)="newBatchModal = false"
+      [minWidth]="400"
+      [width]="400"
+      [height]="300"
+    >
+      <kendo-dialog-titlebar
+        style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+      >
+        <div
+          style="font-size: 18px; line-height: 1.3em; color: white !important;"
+        >
+          <span class="k-icon k-i-notification"></span> New Invoice Batch
+        </div>
+      </kendo-dialog-titlebar>
+      <p>&nbsp;</p>
+      <span style="margin-top: 50px !important">Enter a description for the invoice batch</span>
+      <form [formGroup]="batchForm">
+        <div class="row" style="margin-top: 10px;">                          
+          
+            <div style="display: table;" *ngIf="batchFormLoaded" [formGroup]="batchForm" >
+              <mat-form-field appearance="outline" style="width: 350px;">
+                <mat-label>Description</mat-label>
+                <textarea matInput placeholder="Description" formControlName="Description" rows="5" ></textarea>
+              </mat-form-field>  
+            </div>
+          
+        </div>
+      </form>
+      
+      <kendo-dialog-actions>
+        <button
+        mat-raised-button
+        color="warn"
+        style="width: 50% !important;"
+        (click)="newBatchModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!batchForm.valid || postSubmitted"
+        style="width: 50% !important;"
+        (click)="confirmPostInvoices()"
+      >
+        <mat-spinner
+          *ngIf="postSubmitted"
+          [diameter]="35"
+          style="float:right;"
+        ></mat-spinner>
+        Create Invoice Batch
+      </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+  </div>

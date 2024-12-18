@@ -1,0 +1,47 @@
+<div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95, 'margin-top': '20px' }">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Farm Owner: {{grower.ownerName}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Supervisor: {{grower.supervisor}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Number of Houses/Size: {{grower.houseSize}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Directions:
+      <p *ngFor="let direction of grower.directions">
+         {{direction}}
+      </p>
+    </div>
+  </div>
+</div>
+<div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Account Info:
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Last Sale Date: {{grower.mostRecentSaleDate}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Last Place Date: {{grower.mostRecentPlaceDate}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <!--<div style="display: table">
+      Recent Place Date:
+    </div>-->
+  </div>
+</div>

@@ -1,0 +1,178 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!--Loading gif-->
+                  <!-- <div *ngIf="!transactionsLoaded" style="display: table-row">
+                    Please wait while the page information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>         -->
+
+
+
+                    <div style="display: table-row; margin-bottom: 30px;">
+                      <span style="font-weight: bold">LP Gas</span>
+                      <p>
+                        <mat-spinner
+                          *ngIf="lockLpGas"
+                          [diameter]="35"
+                          style="float:left;"
+                        ></mat-spinner>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="fdblue"
+                          [disabled]="lockLpGas"
+                          (click)="importLpGasTransactions()"
+                          [matTooltip]="'Import the transactions for LP Gas'"
+                          [matTooltipPosition]="'above'"
+                        >
+                        <mat-icon>cloud_upload</mat-icon>
+                          Import LP Gas Transactions
+                        </button>
+                      </p>
+                    </div>
+                    <div style="display: table-row; margin-bottom: 30px; margin-top: 50px;">
+                      <p style="font-weight: bold">PCS Store (Select Date Range)</p>
+                      <form [formGroup]="dateRangeForm">
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Start Date</mat-label>
+                              <input name="StartDate" formControlName="StartDate"   placeholder="Start Date"   matInput [matDatepicker]="StartDatePicker"/>
+                              <mat-datepicker-toggle matSuffix [for]="StartDatePicker"></mat-datepicker-toggle>
+                              <mat-datepicker #StartDatePicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>End Date</mat-label>
+                              <input name="EndDate" formControlName="EndDate"   placeholder="End Date"   matInput [matDatepicker]="EndDatePicker"/>
+                              <mat-datepicker-toggle matSuffix [for]="EndDatePicker"></mat-datepicker-toggle>
+                              <mat-datepicker #EndDatePicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div style="display: table-row; margin-bottom: 30px;">
+                      <p>
+                        <mat-spinner
+                          *ngIf="lockPcsStore"
+                          [diameter]="35"
+                          style="float:left;"
+                        ></mat-spinner>
+                        <button
+                          mat-raised-button
+                          type="button"
+                          [disabled]="lockPcsStore || !dateRangeForm.valid"
+                          color="fdblue"
+                          (click)="importPcsStoreTransactions()"
+                          [matTooltip]="'Import the transactions for PCS Store'"
+                          [matTooltipPosition]="'above'"
+                        >
+                        <mat-icon>cloud_upload</mat-icon>
+                          Import PCS Store Transactions
+                        </button>
+                      </p>
+                    </div>
+
+                    <div style="display: table-row; margin-bottom: 30px;">
+                      <mat-expansion-panel style="width: 100%">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            Import Past Records
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Click to select a past date for record import
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p>Enter a past date to attempt to retrieve LP and/or PCS transaction records from</p>
+                        <div style="display: table-row">
+                          <div style="display: table">
+                            <form [formGroup]="dateRangeForm">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Date</mat-label>
+                                <input name="PastDate" formControlName="PastDate"   placeholder="Date"   matInput [matDatepicker]="PastDatePicker"/>
+                                <mat-datepicker-toggle matSuffix [for]="PastDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #PastDatePicker></mat-datepicker>
+                              </mat-form-field>
+                            </form>
+                          </div>
+                        </div>
+                        <div style="display: table-row; margin-bottom: 30px;">
+                          <p>
+                            <mat-spinner
+                              *ngIf="lockLpGas2"
+                              [diameter]="35"
+                              style="float:left;"
+                            ></mat-spinner>
+                            <button
+                              mat-raised-button
+                              type="button"
+                              [disabled]="lockLpGas2"
+                              color="fdblue"
+                              (click)="importPastLpGasTransactions()"
+                              [matTooltip]="'Import the transactions for LP Gas'"
+                              [matTooltipPosition]="'above'"
+                            >
+                            <mat-icon>cloud_upload</mat-icon>
+                              Import LP Gas Transactions
+                            </button>
+                          </p>
+                        </div>
+
+                        <div style="display: table-row; margin-bottom: 30px;">
+                          <p>
+                            <mat-spinner
+                              *ngIf="lockPcsStore2"
+                              [diameter]="35"
+                              style="float:left;"
+                            ></mat-spinner>
+                            <button
+                              mat-raised-button
+                              type="button"
+                              [disabled]="lockPcsStore2"
+                              color="fdblue"
+                              (click)="importPastPcsStoreTransactions()"
+                              [matTooltip]="'Import the transactions for PCS Store'"
+                              [matTooltipPosition]="'above'"
+                            >
+                            <mat-icon>cloud_upload</mat-icon>
+                              Import PCS Store Transactions
+                            </button>
+                          </p>
+                        </div>
+
+                      </mat-expansion-panel>
+                    </div>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

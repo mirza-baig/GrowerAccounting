@@ -1,0 +1,8 @@
+::ng-deep.cdk-overlay-container {
+    z-index: 20000 !important;
+  }
+  
+
+mat-option {
+    z-index: 999999 !important;
+  } 

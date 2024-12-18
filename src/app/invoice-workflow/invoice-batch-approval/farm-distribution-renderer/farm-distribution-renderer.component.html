@@ -1,0 +1,13 @@
+<!--if just 1 distribution show the grower-->
+<span *ngIf="distributions.length === 0">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</span>
+<span *ngIf="distributions.length === 1">
+  {{distributions[0].growerName}}
+</span>
+
+<span *ngIf="distributions.length > 1" (click)="openModal()" style="font-weight: bold; cursor: pointer;">
+  {{distributions[0].growerName}} (Click for more growers)
+</span>
+
+

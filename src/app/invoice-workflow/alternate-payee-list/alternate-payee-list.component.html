@@ -1,0 +1,204 @@
+
+<!--show the header-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">
+                <!--Loading gif-->
+                <div [hidden]="invoicesLoaded"  style="display: table-row">
+                  Please wait while the invoices load
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>
+
+                <div [hidden]="!invoicesLoaded" style="display: table-row; margin-top: 30px;">
+                  This page is for viewing which invoices have checks that need to be sent to certain recipients and for marking those invoices as completed after those checks are sent
+                 </div>
+
+
+                <div [hidden]="!invoicesLoaded" style="display: table-row; margin-top: 30px;">
+
+
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoices.length > 0"
+                    type="button"
+                    color="fdblue"
+                    (click)="printBatch()"
+                    [matTooltip]="'Print the invoices'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>print</mat-icon>
+                    Print Invoices
+                  </button>
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoices.length > 0"
+                    type="button"
+                    color="fdblue"
+                    (click)="exportData()"
+                    [matTooltip]="'Export the invoice list to Excel'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>cloud_download</mat-icon>
+                    Export to Excel
+                  </button>
+
+                </div>
+
+
+
+                <!--Invoice list -->
+                <div *ngIf="invoicesLoaded" style="display: table-row" >
+                  <ag-grid-angular
+                    #agGrid
+                    [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 250 }"
+                    class="ag-theme-material"
+                    [rowData]="invoices"
+                    [columnDefs]="columnDefs"
+                    (gridReady)="onGridReady($event)"
+                    [frameworkComponents]="frameworkComponents"
+                    [floatingFilter]="true"
+                    [embedFullWidthRows]="true"
+                    [animateRows]="true"
+                    [suppressHorizontalScroll]="true"
+                    [pagination]="true"
+                    [paginationAutoPageSize]="true"
+                    [suppressRowTransform]="true"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Print Batch (new)-->
+<div [hidden]="true" @fade *ngIf="printReady" class="container-fluid" style="display: none;" id="print-section-batch">
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <h1> {{printname}}</h1>
+  </div>
+
+
+  <div *ngFor="let invoice of invoices" class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h1 *ngIf="!!invoice?.invoice.apvoucherId">Invoice Voucher #:
+      {{
+        invoice.invoice.apvoucherId
+      }}
+    </h1>
+    <table class="GeneratedTable">
+      <tbody>
+        <tr>
+          <td>
+            Invoice Voucher #
+          </td>
+          <td>
+            {{invoice?.invoice.apvoucherId}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            {{invoice?.invoice?.description}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Invoice Number
+          </td>
+          <td>
+            {{invoice?.invoice.invoiceNumber}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Grower
+          </td>
+          <td>
+            {{invoice?.growerName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Vendor
+          </td>
+          <td>
+            {{invoice?.vendorName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Invoice Date
+          </td>
+          <td>
+            {{invoice?.invoice.invoiceDate | date: 'MM/dd/yyyy' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Company
+          </td>
+          <td>
+            {{invoice?.invoice.company}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Remittance Note
+          </td>
+          <td>
+            {{invoice?.invoice.remittanceNote}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Amount
+          </td>
+          <td>
+            {{invoice?.invoice.amount | currency: 'USD'}}
+          </td>
+        </tr>
+        <tr style="font-weight: bold;">
+          <td>
+            <h3>Send Check To</h3>
+          </td>
+          <td>
+            <h3>{{invoice?.invoice.payTo}}</h3>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+
+
+</div>

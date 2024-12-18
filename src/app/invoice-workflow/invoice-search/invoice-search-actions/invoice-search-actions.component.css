@@ -1,0 +1,7 @@
+kendo-dialog {
+  z-index: 999999 !important;
+}
+
+::ng-deep.k-window {
+  z-index: 999999 !important;
+}

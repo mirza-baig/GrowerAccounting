@@ -1,0 +1,25 @@
+
+
+
+<h2 mat-dialog-title>Grower Distributions</h2>
+<!--<mat-dialog-content  [ngStyle]="{'width.px' : data.width, 'height.px': data.height - 50 }">-->
+<mat-dialog-content  style="height: 50vh !important;">
+  <table *ngIf="data.length > 1">
+    <tr>
+      <th>Grower</th>
+      <th>Distribution Amount</th>
+    </tr>
+    <tr *ngFor="let dist of data">
+      <td>{{dist.growerName}}</td>
+      <td style="padding-left: 15px;">{{dist.amount | currency : 'USD'}}</td>
+    </tr>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+  mat-raised-button
+  type="button"
+  color="fdblue"
+  (click)="dialog.closeAll()"
+  ><mat-icon>clear</mat-icon>Close</button>
+</mat-dialog-actions>

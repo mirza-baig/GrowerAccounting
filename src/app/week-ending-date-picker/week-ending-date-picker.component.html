@@ -1,0 +1,39 @@
+<form [formGroup]="timeDimForm">
+  <p>
+    Please select a week ending date:
+  </p>
+  <mat-form-field appearance="outline">
+    <mat-label>Year</mat-label>
+    <mat-select formControlName="Year" placeholder="Year" (selectionChange)="onYearChange($event)" > 
+      <mat-option *ngFor="let item of yearList" [value]="item" >
+        {{ item }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Month</mat-label>
+    <mat-select formControlName="Month" placeholder="Month" (selectionChange)="onMonthChange($event)" > 
+      <mat-option *ngFor="let item of monthList" [value]="item.id" >
+        {{ item.text }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> 
+  <mat-form-field appearance="outline">
+    <mat-label>Ending Date</mat-label>
+    <mat-select formControlName="Week" placeholder="Ending Date" (selectionChange)="onDateChange($event)"> 
+      <mat-option *ngFor="let item of dateList" [value]="item.id" >
+        {{ item.text }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> 
+  <!-- <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    [disabled]="!validDate"
+    (click)="selectDateConfirm()"
+  >
+  <mat-icon>send</mat-icon>
+    {{submitButtonText}}
+  </button> -->
+</form>

@@ -1,0 +1,212 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div  *ngIf="!dropdownsLoaded" style="display: table-row">
+              Please wait while the information loads
+              <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+            </div>
+
+            <div *ngIf="dropdownsLoaded " class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <div style="display: table-row" *ngIf="searchFormLoaded">
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <span>Please select criteria to search for invoices to view</span>
+                    </div>
+                    <form [formGroup]="searchForm">
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Invoice Number </mat-label>
+                              <input type="text" formControlName="InvoiceNumber" matInput placeholder="Invoice Number"  >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Check Number </mat-label>
+                              <input type="text" formControlName="CheckNumber" matInput placeholder="Check Number"  >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 300px;">
+                              <mat-label>Grower Name</mat-label>
+                              <input
+                                type="text"
+                                placeholder="Grower Name"
+                                aria-label="string"
+                                matInput
+                                formControlName="GrowerName"
+                                [matAutocomplete]="auto2"
+                              />
+                              <mat-autocomplete
+                                autoActiveFirstOption
+                                (opened)="growerAutocompleteOpen()"
+                                (optionSelected)="growerAutocompleteSelected($event)"
+                                #auto2="matAutocomplete"
+                                style="width: 570px !important;"
+                              >
+                                <mat-option
+                                  *ngFor="let farm of filteredFarms | async; trackBy: trackByGrower"
+                                  [value]="farm.farmName"
+                                >
+                                  {{ farm.farmName }}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Description </mat-label>
+                              <input type="text" formControlName="Description" matInput placeholder="Description"  >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Start Date</mat-label>
+                              <input  formControlName="StartDate"  placeholder="Start Date"   matInput [matDatepicker]="startDatePicker" />
+                              <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                              <mat-datepicker #startDatePicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>End Date</mat-label>
+                              <input  formControlName="EndDate"  placeholder="End Date"   matInput [matDatepicker]="endDatePicker" />
+                              <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                              <mat-datepicker #endDatePicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+
+                      <div class="col-md-6">
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="fdblue"
+                          [disabled]="searching || checksReloading"
+                          [matTooltip]="'Search for invoices'"
+                          [matTooltipPosition]="'above'"
+                          (click)="searchInvoices()"
+                        >
+                        <mat-spinner
+                          *ngIf="searching"
+                          [diameter]="35"
+                          style="float:right;"
+                        ></mat-spinner>
+                          <mat-icon>search</mat-icon>
+                          Search for Invoices
+                        </button>
+                        <button
+                          mat-raised-button
+                          style="margin-left: 15px;"
+                          type="button"
+                          color="warn"
+                          [matTooltip]="'Reset Filters'"
+                          [matTooltipPosition]="'above'"
+                          (click)="resetFilters()"
+                        >
+                          <mat-icon>clear</mat-icon>
+                          Reset Filters
+                        </button>
+                        <!-- <button
+                          mat-raised-button
+                          style="margin-left: 15px;"
+                          type="button"
+                          color="fdblue"
+                          [disabled]="checksReloading || searching"
+                          [matTooltip]="'Sync check data'"
+                          [matTooltipPosition]="'above'"
+                          (click)="syncCheckData()"
+                          appDisabledForRole="Grower Accounting Read Only"
+                        >
+                        <mat-spinner
+                          *ngIf="checksReloading"
+                          [diameter]="35"
+                          style="float:right;"
+                        ></mat-spinner>
+                          <mat-icon>sync</mat-icon>
+                          Sync Check Data
+                        </button> -->
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div  *ngIf="!invoicesLoaded && filterSubmitted" style="display: table-row">
+                    Please wait while the information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>
+
+
+
+                  <div *ngIf="invoicesLoaded" style="display: table-row" >
+
+                    <ag-grid-angular
+                      #agGrid
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 330 }"
+                      class="ag-theme-material"
+                      [rowData]="invoices"
+                      [columnDefs]="colDefs"
+                      (gridReady)="onGridReady($event)"
+                      [frameworkComponents]="frameworkComponents"
+                      [floatingFilter]="true"
+                      [embedFullWidthRows]="true"
+                      [animateRows]="true"
+                      [suppressHorizontalScroll]="true"
+                      [pagination]="true"
+                      [suppressRowClickSelection]="true"
+                      [paginationAutoPageSize]="true"
+                      [modules]="modules">
+                    </ag-grid-angular>
+
+                  </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+

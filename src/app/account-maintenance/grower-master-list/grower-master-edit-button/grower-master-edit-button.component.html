@@ -1,0 +1,52 @@
+<span style="width: 400px;">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit the information for ' + params.data.farmName"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>edit</mat-icon>
+    <!--Edit-->
+  </button>
+  <button
+    mat-raised-button
+    style="margin-left: 10px;"
+    type="button"
+    color="fdblue"
+    (click)="goToAccountMaintenance()"
+    [matTooltip]="'Edit the accounts for ' + params.data.farmName"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>account_balance</mat-icon>
+    <!--Manage Accounts-->
+  </button>
+  <button
+    *ngIf="params.data.farmType !== 'Misc' && !lockSettlements && params.data.status === 'Active'"
+    mat-raised-button
+    style="margin-left: 15px;"
+    type="button"
+    color="fdblue"
+    (click)="goToTransfer()"
+    [matTooltip]="'Transfer funds to one of the grower accounts'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>sync_alt</mat-icon>
+  <!--Transfer Funds To Account-->
+  </button>
+  <button
+  mat-raised-button
+  style="margin-left: 15px;"
+  type="button"
+  color="fdblue"
+  (click)="displayFarmInformation()"
+  [matTooltip]="'View Farm Information'"
+  [matTooltipPosition]="'above'"
+  >
+  <mat-icon>info</mat-icon>
+   <!-- View Farm Information-->
+  </button>
+</span>

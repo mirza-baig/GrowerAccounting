@@ -1,0 +1,22 @@
+<div *ngIf="!!grower" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      Farm: {{grower.id}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      {{grower.farmName}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      {{grower.farmAddress1}}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <div style="display: table">
+      {{farmType}}
+    </div>
+  </div>
+</div>

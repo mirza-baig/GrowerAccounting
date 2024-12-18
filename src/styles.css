@@ -1,0 +1,711 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'fieldale-angular.css';
+/* You can add global styles to this file, and also import other style files */
+@import 'fieldale-angular.css';
+/* @import 'fieldale-animations.ts'; */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/* imports for ag grid */
+@import "~@ag-grid-community/all-modules/dist/styles/ag-grid.css";
+@import "~@ag-grid-community/all-modules/dist/styles/ag-theme-balham.css";
+@import "~@ag-grid-community/all-modules/dist/styles/ag-theme-material.css";
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}
+
+html,
+body {
+    -ms-overflow-style: scrollbar;
+    /* height: 100%; */
+    /* background-color: #ffffff;
+  background-image: url('https://www.transparenttextures.com/patterns/paper-2.png'); */
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+body {
+    -ms-overflow-style: scrollbar;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    /* font-weight: bold; */
+    margin: 0;
+}
+
+.k-window-titlebar.k-dialog-titlebar.k-header {
+    background-color: rgb(0, 74, 138) !important;
+    color: white !important;
+    text-align: center !important;
+}
+
+.k-widget.k-window .k-window-titlebar .k-window-title {
+    color: white !important;
+}
+
+.k-window-titlebar.k-dialog-titlebar.k-header k-icon {
+    font-size: 30px !important;
+}
+
+@supports (-ms-accelerator: true) {
+    body {
+        overflow-x: hidden;
+    }
+}
+
+.projected-spend-dialog div.k-widget.k-window.k-dialog.ng-trigger.ng-trigger-dialogSlideInAppear {
+    width: 98% !important;
+    height: 80% !important;
+    max-width: 100% !important;
+}
+
+.page-title {
+  font-size: 1.5rem;
+}
+
+.col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-xs-5ths {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+/* .ui-scrollpanel-content {
+  overflow: auto;
+  width: 100%;
+  background: linear-gradient(white 30%, rgb(255 255 255 / 0)),
+    linear-gradient(rgb(255 255 255 / 0), white 70%) 0 100%,
+    radial-gradient(50% 0, rgb(0 0 0 / 0.2), rgb(0 0 0 / 0)),
+    radial-gradient(50% 100%, rgb(0 0 0 / 0.2), rgb(0 0 0 / 0)) 0 100%;
+  background: linear-gradient(white 30%, rgb(255 255 255 / 0)),
+    linear-gradient(rgb(255 255 255 / 0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgb(0 0 0 / 0.2), rgb(0 0 0 / 0)),
+    radial-gradient(farthest-side at 50% 100%, rgb(0 0 0 / 0.2), rgb(0 0 0 / 0))
+      0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 40px, 100% 40px;
+  background-attachment: local, local, scroll, scroll;
+} */
+
+.ui-scrollpanel-content {
+    overflow: auto;
+    width: 100%;
+    height: 100% !important;
+    padding: 0 19px 0 0;
+    /* max-height: 200px;
+  margin: 50px auto; */
+    background:
+        /* Shadow covers */
+        linear-gradient(white 30%,
+        rgba(255, 255, 255, 0)),
+        linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+        /* Shadows */
+        radial-gradient(farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)),
+        radial-gradient(farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)) 0 100%;
+    background:
+        /* Shadow covers */
+        linear-gradient(white 30%,
+        rgba(255, 255, 255, 0)),
+        linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+        /* Shadows */
+        radial-gradient(farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)),
+        radial-gradient(farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)) 0 100%;
+    background-repeat: no-repeat;
+    background-color: white;
+    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    /* Opera doesn't support this in the shorthand */
+    background-attachment: local, local, scroll, scroll;
+}
+
+.ui-toast.ui-widget.ui-toast-top-right {
+    z-index: 100001 !important;
+}
+
+/* .custom .ui-scrollpanel-wrapper {
+  border-right: 9px solid #f4f4f4;
+} */
+
+.mat-stepper-horizontal-line {
+    min-width: 16px !important;
+}
+
+.custom .ui-scrollpanel-bar {
+    background-color: #1976d2;
+    opacity: 1;
+    transition: background-color 0.3s;
+    /* z-index: 0; */
+}
+
+.custom .ui-scrollpanel-bar:hover {
+    background-color: #135ba1;
+}
+
+/* .mat-horizontal-stepper-content {
+  background-color: #ffffff;
+  background-image: url('https://www.transparenttextures.com/patterns/paper-2.png');
+  This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you!
+} */
+
+/* .mat-stepper-horizontal {
+  background-color: #ffffff;
+  background-image: url('https://www.transparenttextures.com/patterns/paper-2.png');
+  This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you!
+} */
+
+/* Input fields */
+/* .mat-select {
+  -webkit-box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  -moz-box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  min-height: 25px !important;
+  padding-top: 5px !important;
+  padding-left: 5px !important;
+  border: solid 1px black;
+}
+
+textarea.mat-input-element {
+  -webkit-box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  -moz-box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  min-height: 25px !important;
+  padding-top: 5px !important;
+  padding-left: 5px !important;
+  border: solid 1px black;
+} */
+
+textarea.mat-input-element:disabled {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    min-height: 25px !important;
+    padding-top: 5px !important;
+    padding-left: 5px !important;
+    border: none;
+}
+
+/* input.mat-input-element {
+  -webkit-box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  -moz-box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0px 1px 13px 1px rgba(0, 0, 0, 0.1) !important;
+  min-height: 25px !important;
+  padding-top: 5px !important;
+  padding-left: 5px !important;
+  border: solid 1px black;
+} */
+
+input.mat-input-element:disabled {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    min-height: 25px !important;
+    padding-top: 5px !important;
+    padding-left: 5px !important;
+    border: none;
+}
+
+/* End Input Fields */
+
+/* default .loading-root styles, .loading-root should be invisible, opacity: 0, z-index: -1 */
+.loading-root {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    background: url('assets/qubes.png');
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    z-index: -1;
+    color: black;
+}
+
+.loading-root>h3 {
+    display: flex;
+    justify-content: center;
+}
+
+/* .loading-root screen is visible when app is not bootstrapped yet, my-app is empty */
+app-root:empty+.loading-root {
+    opacity: 1;
+    z-index: 100;
+}
+
+/* Absolute Center Spinner */
+.loading-indicator {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.k-upload .k-file-success .k-file-name {
+    color: #37b400 !important;
+}
+
+/* Input fields */
+.mat-select {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    min-height: 0px !important;
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    border: none !important;
+    /* background-color: whitesmoke !important; */
+}
+
+textarea.mat-input-element {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    min-height: 0px !important;
+    padding-top: 0px !important;
+    padding-left: 0 !important;
+    border: none !important;
+
+    /* background-color: whitesmoke !important; */
+}
+
+input.mat-input-element {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    min-height: 0px !important;
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+    border: none !important;
+}
+
+/* background-color: whitesmoke !important; */
+/* End Input Fields */
+
+.ui-sidebar {
+    overflow-y: scroll;
+}
+
+.mat-form-field {
+    /* font-size: 20px; */
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label {
+    color: black;
+}
+
+.mat-form-field-label {
+    color: black !important;
+}
+
+.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.28125em) scale(0.85) perspective(100px) translateZ(0.001px);
+}
+
+/* form-field outline style */
+.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0;
+}
+
+/* .form-control {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+} */
+
+.mat-input-element:disabled {
+    color: black;
+}
+
+kendo-upload-action-buttons {
+    display: none !important;
+}
+
+/* Expansion panel right aligned desc */
+.right-aligned-desc>.mat-content {
+    justify-content: space-between;
+}
+
+.mat-content>mat-panel-title,
+.mat-content>mat-panel-description {
+    flex: 0 0 auto;
+}
+
+/* End Expansion panel right aligned desc */
+
+mat-vertical-stepper .mat-vertical-stepper-header {
+    max-height: 8px !important;
+}
+
+/* .k-grid table tr:hover td {
+  background: rgba(107, 188, 242, 0.25) !important;
+  cursor: pointer !important;
+} */
+
+::ng-deep.k-file-success {
+    color: #37b400 !important;
+    background-color: #37b400 !important;
+}
+
+.k-grid-header {
+    padding-right: 0px !important;
+}
+
+#cdk-accordion-child-0>div>kendo-grid>div>div {}
+
+/* Attempting to make the header fixed to the top */
+/* ::ng-deep capx-header {
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+} */
+
+.k-dialog {
+    max-height: 80% !important;
+    max-width: 90% !important;
+}
+
+.k-master-row:hover {
+    background-color: rgba(107, 188, 242, 0.25) !important;
+}
+
+.k-detail-row .k-grid tbody tr:hover {
+    background-color: rgba(107, 188, 242, 0.25) !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: RGB(0, 74, 138);
+}
+
+.loading {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    background-color: #cad3d9;
+    /* background-image: url('assets/fabric.png'); */
+    font-weight: bold;
+    text-align: center;
+}
+
+.content {
+    /* height: calc(100% - 49px); */
+    width: 100%;
+}
+
+.wrap {
+    width: 100%;
+    /* height: 100%; */
+    /* margin-top: 50px; */
+    /* border-radius: 5px; */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    /* min-width: 750px; */
+    /* max-width: 1835px; */
+}
+
+.SpinnerSize {
+    width: 25px;
+    height: 25px;
+}
+
+.fieldale-logo {
+    background-image: url('assets/FIELDALE_CORP_VECTOR.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 40px;
+    width: 40px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+}
+
+.mat-tooltip {
+    font-size: 16px !important;
+}
+
+.grower-logo {
+    background-image: url('assets/GrowerAccounting.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 40px;
+    width: 40px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 4px;
+}
+
+.mat-card {
+    padding: 0 !important;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+.mat-card-content,
+.mat-card-title {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+kendo-chart text {
+    color: black;
+    fill: black;
+}
+
+/* for read only visibility */
+.mat-input-element:disabled {
+    color: black !important;
+}
+
+.mat-select-disabled {
+    color: black !important;
+    background-color: rgb(233, 236, 239) !important;
+}
+
+.mat-select-value {
+    color: black !important;
+}
+
+/* ::ng-deep .k-grid th {
+  padding: 10px 5px !important;
+  padding-top: 10px !important;
+  padding-right: 5px !important;
+  padding-bottom: 10px !important;
+  padding-left: 5px!important;
+}
+::ng-deep .k-grid td {
+  padding: 10px 5px !important;
+  padding-top: 10px !important;
+  padding-right: 5px !important;
+  padding-bottom: 10px !important;
+  padding-left: 5px!important;
+} */
+/* .k-grid .no-padding {
+  padding: 0 !important;
+  padding-top: 10px !important;
+  padding-right: 5px !important;
+  padding-bottom: 10px !important;
+  padding-left: 5px!important;
+}
+ .whole-cell {
+   display: block;
+   padding: 8px 12px !important;
+ } */
+
+/* ::ng-deep.k-icon.k-i-ix::before {
+  color: white !important;
+  font-size: 30px !important;
+}
+::ng-deep.k-dialog-actions {
+  color: white !important;
+  font-size: 30px !important;
+}
+::ng-deep.k-dialog-close {
+  color: white !important;
+  font-size: 30px !important;
+} */
+
+.mat-form-field {
+    font-size: 14px;
+    font-weight: bold;
+    /* font-size: 20px; */
+}
+
+.mat-form-field-disabled {
+    font-weight: normal;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label {
+    color: black;
+}
+
+/* .mat-expansion-indicator {
+  position: absolute;
+  left: 20px;
+} */
+
+/*
+ * Container style
+ */
+.ps {
+    overflow: hidden !important;
+    overflow-anchor: none;
+    -ms-overflow-style: none;
+    touch-action: auto;
+    -ms-touch-action: auto;
+}
+
+/*
+ * Scrollbar rail styles
+ */
+.ps__rail-x {
+    display: none;
+    opacity: 0;
+    transition: background-color 0.2s linear, opacity 0.2s linear;
+    -webkit-transition: background-color 0.2s linear, opacity 0.2s linear;
+    height: 15px;
+    /* there must be 'bottom' or 'top' for ps__rail-x */
+    bottom: 0px;
+    /* please don't change 'position' */
+    position: absolute;
+}
+
+.ps__rail-y {
+    display: none;
+    opacity: 0;
+    transition: background-color 0.2s linear, opacity 0.2s linear;
+    -webkit-transition: background-color 0.2s linear, opacity 0.2s linear;
+    width: 15px;
+    /* there must be 'right' or 'left' for ps__rail-y */
+    right: 0;
+    /* please don't change 'position' */
+    position: absolute;
+}
+
+.ps--active-x>.ps__rail-x,
+.ps--active-y>.ps__rail-y {
+    display: block;
+    background-color: transparent;
+}
+
+.ps:hover>.ps__rail-x,
+.ps:hover>.ps__rail-y,
+.ps--focus>.ps__rail-x,
+.ps--focus>.ps__rail-y,
+.ps--scrolling-x>.ps__rail-x,
+.ps--scrolling-y>.ps__rail-y {
+    opacity: 0.6;
+}
+
+.ps .ps__rail-x:hover,
+.ps .ps__rail-y:hover,
+.ps .ps__rail-x:focus,
+.ps .ps__rail-y:focus,
+.ps .ps__rail-x.ps--clicking,
+.ps .ps__rail-y.ps--clicking {
+    background-color: #eee;
+    opacity: 0.9;
+}
+
+/*
+ * Scrollbar thumb styles
+ */
+.ps__thumb-x {
+    background-color: #aaa;
+    border-radius: 6px;
+    transition: background-color 0.2s linear, height 0.2s ease-in-out;
+    -webkit-transition: background-color 0.2s linear, height 0.2s ease-in-out;
+    height: 6px;
+    /* there must be 'bottom' for ps__thumb-x */
+    bottom: 2px;
+    /* please don't change 'position' */
+    position: absolute;
+}
+
+.ps__thumb-y {
+    background-color: #aaa;
+    border-radius: 6px;
+    transition: background-color 0.2s linear, width 0.2s ease-in-out;
+    -webkit-transition: background-color 0.2s linear, width 0.2s ease-in-out;
+    width: 6px;
+    /* there must be 'right' for ps__thumb-y */
+    right: 2px;
+    /* please don't change 'position' */
+    position: absolute;
+}
+
+.ps__rail-x:hover>.ps__thumb-x,
+.ps__rail-x:focus>.ps__thumb-x,
+.ps__rail-x.ps--clicking .ps__thumb-x {
+    background-color: #999;
+    height: 11px;
+}
+
+.ps__rail-y:hover>.ps__thumb-y,
+.ps__rail-y:focus>.ps__thumb-y,
+.ps__rail-y.ps--clicking .ps__thumb-y {
+    background-color: #999;
+    width: 11px;
+}
+
+/* MS supports */
+@supports (-ms-overflow-style: none) {
+    .ps {
+        overflow: auto !important;
+    }
+}
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+    .ps {
+        overflow: auto !important;
+    }
+}
+
+
+::ng-deep.k-window-content {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}
+
+::ng-deep.mat-dialog-content {
+  max-height: 100vh !important;
+  max-width: 100vh !important;
+}
+
+.mat-dialog-content {
+  max-height: 90vh !important;
+  max-width: 100vw !important;
+}

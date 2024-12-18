@@ -1,0 +1,24 @@
+<span *ngIf="params.data.stage !=='Exported'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    appDisabledForRole="Grower Accounting Read Only"
+    [matTooltip]="'Edit'"
+  >
+  <mat-icon>edit</mat-icon>
+  </button>
+</span>
+
+<span *ngIf="params.data.stage ==='Exported'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'View'"
+  >
+  <mat-icon>visibility</mat-icon>
+  </button>
+</span>

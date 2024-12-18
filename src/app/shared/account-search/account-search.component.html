@@ -1,0 +1,75 @@
+<div style="display: table-row">
+  &nbsp;
+</div>
+<!--loading bar-->
+<div *ngIf="loadingAccount" style="display: table-row">
+  Please wait
+  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.9  }" mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div *ngIf="!loadingAccount && !accountSelected">
+  Please select an account by clicking on the button-
+</div>
+
+<div *ngIf="!loadingAccount && !accountSelected">
+  <ag-grid-angular
+    #agGrid
+    [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 300 }"
+    class="ag-theme-material"
+    [rowData]="accounts"
+    [columnDefs]="columnDefs"
+    [rowSelection]="'single'"
+    [floatingFilter]="true"
+    (selectionChanged)="onSelectionChanged($event)"
+    [embedFullWidthRows]="true"
+    [animateRows]="true"
+    [pagination]="true"
+    [paginationAutoPageSize]="true"
+    [rowHeight]="42"
+    [suppressHorizontalScroll]="true"
+    [suppressRowClickSelection]="true"
+    [frameworkComponents]="frameworkComponents"
+    (gridReady)="onGridReady($event)"
+    [modules]="modules">
+  </ag-grid-angular>
+</div>
+
+<!-- reset the choice -->
+<div *ngIf="accountSelected" style="display: table-row" [ngStyle]="{'width.px': innerWidth * 0.9 }" >
+  <span>Account: {{ currentlySelectedAccount.accountType }} - {{ currentlySelectedAccount.accountSuffix }}</span>
+  <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="resetChoice()"
+    [matTooltip]="'Choose another account'"
+    [matTooltipPosition]="'above'"
+  >
+    <mat-icon>undo</mat-icon>
+    Choose Another Account
+  </button>
+  <table [ngStyle]="{'width.px': innerWidth * 0.9 }">
+    <tr>
+      <th>Balance Forward</th>
+      <th>Current Charges</th>
+      <th>Current Credits</th>
+      <th>Cash Advance</th>
+      <th>Amount Due</th>
+      <th>Interest Charged</th>
+      <th>Interest Paid</th>
+    </tr>
+    <tr>
+      <td>{{currentlySelectedAccount.balanceForward | currency: 'USD'}}</td>
+      <td>{{currentlySelectedAccount.currentCharges | currency: 'USD'}}</td>
+      <td>{{currentlySelectedAccount.currentCredits | currency: 'USD'}}</td>
+      <td>{{currentlySelectedAccount.cashAdvances | currency: 'USD'}}</td>
+      <td>{{currentlySelectedAccount.amountDue | currency: 'USD'}}</td>
+      <td>{{currentlySelectedAccount.ytdinterestCharged | currency: 'USD'}}</td>
+      <td>{{currentlySelectedAccount.ytdinterestPaid | currency: 'USD'}}</td>
+    </tr>
+  </table>
+</div>
+<div style="display: table-row">
+  &nbsp;
+</div>

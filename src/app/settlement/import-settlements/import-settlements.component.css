@@ -1,0 +1,5 @@
+.small-spinner,
+.small-spinner svg {
+    width: 35px !important;
+    height: 35px !important;
+}

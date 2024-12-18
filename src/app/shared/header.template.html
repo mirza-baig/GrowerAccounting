@@ -1,0 +1,230 @@
+<mat-card-header id="header">
+  <!-- <app-router-tab>
+    <app-router-tab-item label="Home"
+    [routerLink]="['/DashboardComponent']">
+    </app-router-tab-item>
+    <app-router-tab-item *ngIf="hasBudgetAccess" label="Budget Items"
+    [routerLink]="['/BudgetComponent']">
+    </app-router-tab-item>
+    <app-router-tab-item *ngIf="hasBudgetAccess && showPlanned" label="Budget Planning"
+    [routerLink]="['/BudgetPlannedAddComponent']">
+    </app-router-tab-item>
+    <app-router-tab-item *ngIf="hasProjectAccess" label="Project"
+    [routerLink]="['/ProjectComponent']">
+    </app-router-tab-item>
+    <app-router-tab-item *ngIf="hasAdminAccess" label="Admin" [routerLinkActiveOptions]="{active: moduleTitle=='Admin'}" [matMenuTriggerFor]="adminMenu">
+    </app-router-tab-item>
+    <app-router-tab-item *ngIf="hasImpersonationAccess && changeUserString === 'Proxy LogOn'" label="Proxy"
+    [routerLink]="['/UserImpersonationComponent']">
+    </app-router-tab-item>
+  </app-router-tab> -->
+  <nav mat-tab-nav-bar [disableRipple]="true">
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      [active]="moduleTitle == 'Dashboard'"
+      [routerLink]="['/DashboardComponent']"
+    >
+      <b>Home</b>
+    </a>
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      *ngIf="hasAccountingAccess"
+      [active]="moduleTitle == 'Account Maintenance'"
+      [matMenuTriggerFor]="accountManagementMenu"
+    >
+      <b>Grower</b>
+    </a>
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      *ngIf="hasAccountingAccess"
+      [active]="moduleTitle == 'Transactions'"
+      [matMenuTriggerFor]="transactionMenu"
+    >
+      <b>Transactions</b>
+    </a>
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      *ngIf="hasAccountingAccess || hasRole('Grower Accounting Admin,LPO Entry,Accounting,InvoiceProcessor')"
+      [active]="moduleTitle == 'Invoice'"
+      [matMenuTriggerFor]="invoiceMenu"
+    >
+      <b>Invoice</b>
+    </a>
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      *ngIf="hasAccountingAccess"
+      [routerLink]="['/BankNoteListComponent']"
+      [active]="moduleTitle == 'Bank Note'"
+    >
+      <b>Bank Notes</b>
+    </a>
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      *ngIf="hasAccountingAccess"
+      [active]="moduleTitle == 'Settlements'"
+      [matMenuTriggerFor]="settlementsMenu"
+    >
+      <b>Settlements</b>
+    </a>
+    <a
+      [disableRipple]="true"
+      mat-tab-link
+      *ngIf="hasAccountingAccess"
+      [matMenuTriggerFor]="reportingMenu"
+      [active]="moduleTitle == 'Reporting'"
+    >
+      <b>Reports</b>
+    </a>
+  </nav>
+  <!-- ? How to menu -->
+  <!-- <mat-tab-group class="help-tab">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <a
+          [matMenuTriggerFor]="howToMenu"
+          style="position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;"
+          >How do I...<mat-icon
+            style="position: absolute; right: 20px; bottom: 13px;"
+            >help_outline</mat-icon
+          ></a
+        >
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group> -->
+  <!-- todo - link to grower AR knowledge base and docs -->
+  <button
+    mat-mini-fab
+    onclick=" window.open('assets\\Grower Accounting User Guide.docx', '_blank')"
+    style="position: absolute; top: 5px; right: 50px;"
+  >
+    <mat-icon>help_outline</mat-icon>
+  </button>
+  <div class="grower-logo"></div>
+</mat-card-header>
+<p-toast></p-toast>
+<!--Custom Popup-->
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="customDialog"
+    (close)="closeCustomDialog()"
+    [minWidth]="250"
+    [width]="450"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> {{ popupTitle }}
+      </div>
+    </kendo-dialog-titlebar>
+    <p style="margin: 30px; text-align: center;">{{ popupText }}</p>
+    <kendo-dialog-actions>
+      <button
+        kendoButton
+        (click)="closeCustomDialog()"
+        primary="true"
+        class="button-fdblue"
+      >
+        <span style="color:black;">Ok</span>
+      </button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>
+
+<mat-menu #transactionMenu="matMenu" [overlapTrigger]="false">
+  <button mat-menu-item [routerLink]="['/GrowerTransactionsComponent']">
+    Manage Transactions
+  </button>
+  <button *ngIf="!lockSettlements" mat-menu-item [routerLink]="['/ImportTransactionsComponent']">
+    Import Transactions
+  </button>
+  <button mat-menu-item [routerLink]="['/AccountInquiryComponent']">
+    Grower Transaction History
+  </button>
+  <button mat-menu-item [routerLink]="['/AccountTransactionInquiryComponent']">
+    Account Transaction Inquiry
+  </button>
+
+  <button mat-menu-item [routerLink]="['/TaxExemptListComponent']">
+    Tax Exempt Transactions
+  </button>
+
+</mat-menu>
+
+<mat-menu #settlementsMenu="matMenu" [overlapTrigger]="false">
+  <button mat-menu-item [routerLink]="['/SettlementBatchListComponent']">
+    Manage Settlements
+  </button>
+  <button mat-menu-item [routerLink]="['/ImportSettlementsComponent']">
+    Import Settlements
+  </button>
+  <button mat-menu-item [routerLink]="['/AnnualBreederResetComponent']">
+    Reset Breeder Counts
+  </button>
+
+</mat-menu>
+
+<mat-menu #accountManagementMenu="matMenu" [overlapTrigger]="false">
+  <button mat-menu-item [routerLink]="['/GrowerMasterListComponent']">
+    Grower Master List
+  </button>
+  <button mat-menu-item [routerLink]="['/GrowerBonusUploadComponent']">
+    Bonus Payments
+  </button>
+  <button mat-menu-item [routerLink]="['/Grower1099ManagementComponent']">
+    Grower 1099s
+  </button>
+  <button mat-menu-item [routerLink]="['/AccountTransactionInquiryComponent']">
+    Account Transaction Inquiry
+  </button>
+
+
+
+</mat-menu>
+
+<mat-menu #invoiceMenu="matMenu" [overlapTrigger]="false">
+  <button mat-menu-item [routerLink]="['/InvoiceSearchComponent']" *ngIf="hasRole('Grower Accounting Admin,Accounting,LPO Entry')">
+    Search Invoices
+  </button>
+
+  <button mat-menu-item [routerLink]="['/InvoiceBatchListComponent']" *ngIf="hasRole('Grower Accounting Admin,Accounting,LPO Entry')">
+    Invoice Request List
+  </button>
+
+  <button mat-menu-item [routerLink]="['/ProcessInvoiceBatchListComponent']" *ngIf="hasRole('Grower Accounting Admin,Accounting,Invoice Processor')">
+    Process Invoices
+  </button>
+  <button mat-menu-item [routerLink]="['/AlternatePayeeListComponent']" *ngIf="hasRole('Grower Accounting Admin,Accounting')">
+    Mark Checks as Sent
+  </button>
+  <button mat-menu-item [routerLink]="['/APBalanceCompareComponent']" *ngIf="hasRole('Grower Accounting Admin,Accounting')">
+    Compare AP Balances
+  </button>
+  <button mat-menu-item [routerLink]="['/WorkflowContactManagementComponent']" *ngIf="hasRole('Grower Accounting Admin,Accounting')">
+    Manage Approvers
+  </button>
+</mat-menu>
+
+<mat-menu #reportingMenu="matMenu" [overlapTrigger]="false">
+  <button mat-menu-item [routerLink]="['/ReportingComponent']">
+    Reports
+  </button>
+
+  <button mat-menu-item [routerLink]="['/AccountInquiryComponent']">
+    Transaction Inquiry
+  </button>
+
+  <button mat-menu-item [routerLink]="['/CreditInquiryComponent']">
+    Credit Inquiry
+  </button>
+</mat-menu>
+
+

@@ -1,0 +1,65 @@
+
+<!--Grower list-->
+<div *ngIf="!settlementSelected">
+  Please select a settlement by clicking on the button-
+</div>
+<div *ngIf="!settlementSelected && !!settlements" style="display: table-row" >
+  <ag-grid-angular 
+    #agGrid 
+    [ngStyle]="{'width.px': widthpx , 'height.px': heightpx}"
+    class="ag-theme-material"
+    [rowData]="settlements" 
+    [columnDefs]="settlementColumnDefs"
+    (gridReady)="onSettlementGridReady($event)"
+    [rowSelection]="'single'"
+    [floatingFilter]="true"
+    (selectionChanged)="onSelectionChanged($event)"
+    [embedFullWidthRows]="true"
+    [animateRows]="true"
+    [pagination]="true"
+    [paginationAutoPageSize]="true"
+    [rowHeight]="42"
+    [suppressHorizontalScroll]="true"
+    [suppressRowClickSelection]="true"
+    [frameworkComponents]="frameworkComponents"
+    [modules]="modules">
+  </ag-grid-angular>
+</div>
+<!--confirm your choice-->
+<!-- <div *ngIf="growersLoaded && growerSelected && !growerConfirmed" style="display: table-row" >
+  <button 
+    mat-raised-button
+    type="button"
+    color="fdblue" 
+    (click)="confirmChoice()"
+    [matTooltip]="'Select ' + currentlySelectedGrower.id + ' - ' + currentlySelectedGrower.farmName"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>check</mat-icon>
+    Confirm Selection
+  </button>
+</div>        -->
+
+<!-- reset the choice -->
+<div *ngIf="settlementSelected" style="display: table-row" [ngStyle]="{'width.px': widthpx * 0.9 }" >
+  <span>Settlement: #{{currentlySelectedSettlement.entity}}</span>
+  <button 
+    mat-raised-button
+    style="margin-left: 15px;"
+    type="button"
+    color="warn" 
+    (click)="resetChoice()"
+    
+    [hidden]="lock"
+    [matTooltip]="'Choose another settlement'"
+    [matTooltipPosition]="'above'"
+  >
+    <mat-icon>undo</mat-icon>
+    Choose Another Settlement
+  </button>
+</div>
+
+<!-- <div *ngIf="growerConfirmed && !hideSelectAnother" style="display: row; margin-bottom: 30px;" >  
+  
+  
+</div> -->

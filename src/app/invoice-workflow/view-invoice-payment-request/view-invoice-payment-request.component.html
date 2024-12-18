@@ -1,0 +1,62 @@
+
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                    <div *ngIf="!loaded">
+                      Please wait while the invoice loads
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                    </div>
+                    <div style="display: table-row" *ngIf="loaded">                      
+                      <app-invoice-payment-request-view-panel                        
+                        [id]="id"
+                      >
+                      </app-invoice-payment-request-view-panel>
+                    </div>         
+                    <div style="display: table-row" *ngIf="loaded">
+                      <span>Approval History</span>
+                      <table [ngStyle]="{ 'width.px' : innerWidth * 0.5 }">
+                        <tr>
+                          <th>Date</th>
+                          <th>User</th>
+                          <th>Approval Step</th>
+                          <th>Action Taken</th>                          
+                          <th>Comments</th>
+                        </tr>
+                        <tr *ngFor="let action of actions">
+                          <td>{{ action.date | date: 'MM/dd/yyyy' }} {{getTime(action.date)}}</td>
+                          <td>{{ getContact(action.workflowContactId) }}</td>
+                          <td>{{ action.stage }}</td>
+                          <td>{{ action.actionTaken }}</td>
+                          <td>{{ action.comment }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+

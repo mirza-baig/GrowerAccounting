@@ -1,0 +1,351 @@
+<div
+  style="position: fixed; width: 100%; height: 100%; background-image: url('../../assets/qubes.png')"
+></div>
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+    <!-- <mat-card-title @fade style="padding-top: 40px">
+      {{ this.pageTitle }}
+    </mat-card-title> -->
+    <mat-card-content @fade>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xl-12">
+            <h1>Home</h1>
+            <span>Version: {{environmentVersion}} - {{environmentBuildName}}</span>
+          </div>
+          <div class="col-xl-8">
+            <mat-card
+            [ngStyle]="{'height.px' : innerHeight - 130, 'width.px': innerWidth * 0.67, 'padding-bottom': '10px' }"
+
+            >
+              <mat-card-title>
+                I need to...
+              </mat-card-title>
+              <mat-card-content >
+                <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+                <mat-grid-list
+                *ngIf="!loading" cols="3" rowHeight="2:1" gutterSize="5px">
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/GrowerMasterListComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-grower-master-list.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Grower Master</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/AccountInquiryComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-account-inquiry.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Transaction Inquiry</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/GrowerTransactionsComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-enter-proj.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Manage Transactions</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/ImportTransactionsComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-import-transactions.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Import Transactions</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess() || hasAdminAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/ReportingComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-reports.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">View Reports</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess() || hasInvoiceProcessorAccess() || hasLpoEntryAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/InvoiceBatchListComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-invoice-list.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Enter Grower AP Invoices</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/BankNoteListComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-bank-note.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">View Bank Notes</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+
+                  <mat-grid-tile
+                    *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/SettlementBatchListComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-settlement-list.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Manage Settlements</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile
+                  *ngIf="hasAccountingAccess()"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/ImportSettlementsComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-import-settlements.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">Import Settlements</p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+
+
+                  <!-- <mat-grid-tile
+                    *ngIf="hasProjectAccess() && !hiddenLink"
+                    (mouseenter)="elevate($event)"
+                    (mouseleave)="lower($event)"
+                    class="mat-elevation-z1 dashboard-tile"
+                    [routerLink]="['/ProjectComponent']"
+                  >
+                    <div class="tile-div-container">
+                      <div class="tile-icon-div">
+                        <img
+                          src="../../assets/bg-add-asset.png"
+                          class="tile-icon"
+                        />
+                      </div>
+                      <div class="tile-text-div">
+                        <p class="tile-text">
+                          Add Assets to an Existing, Approved Project
+                        </p>
+                      </div>
+                    </div>
+                  </mat-grid-tile>
+                   -->
+                </mat-grid-list>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <!--! save for later if we find a way to use it-->
+          <!-- <div class="col-xl-4">
+            <mat-card style="padding-bottom: 10px; height: 100%;">
+              <mat-card-content>
+                <mat-tab-group>
+                  <mat-tab label="My Budgets In process">
+                    <kendo-grid
+                      #budgetsInProcessGrid
+                      [data]="currentUsersBudgetsInProcess"
+                      [loading]="openBudgetsLoading"
+                      [height]="'auto'"
+                      [selectable]="{ mode: 'single' }"
+                      [kendoGridSelectBy]="'Id'"
+                      [selectedKeys]="selectedBudgetInWorkflowId"
+                    >
+                      <ng-template kendoGridToolbarTemplate>
+                        <button
+                          style="float: right;"
+                          mat-raised-button
+                          color="primary"
+                          [disabled]="
+                            budgetsInProcessGrid.selectionService.selected
+                              .length == 0
+                          "
+                          (click)="openBudgetInProcessDialog()"
+                        >
+                          View Progress
+                        </button>
+                        <button
+                          style="float: right; margin-right: 5px;"
+                          mat-raised-button
+                          color="primary"
+                          [disabled]="
+                            projectsInProcessLoading || openBudgetsLoading
+                          "
+                          (click)="getOpenBudgetDrafts()"
+                        >
+                          Refresh
+                          <mat-icon>refresh</mat-icon>
+                        </button>
+                      </ng-template>
+                      <kendo-grid-column
+                        class="dbl-click-col"
+                        title="Name"
+                        field="BudgetName"
+                      >
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                          <div
+                            class="dbl-click-div"
+                            (dblclick)="openBudgetInProcessDialog()"
+                          >
+                            {{ dataItem.BudgetName }}
+                          </div>
+                        </ng-template>
+                      </kendo-grid-column>
+                    </kendo-grid>
+                  </mat-tab>
+                  <mat-tab label="My Projects In process">
+                    <kendo-grid
+                      #projectsInProcessGrid
+                      [data]="currentUsersProjectsInProcess"
+                      [loading]="projectsInProcessLoading"
+                      [height]="'auto'"
+                      [selectable]="{ mode: 'single' }"
+                      [kendoGridSelectBy]="'Id'"
+                      [selectedKeys]="selectedProjectInWorkflowId"
+                    >
+                      <ng-template kendoGridToolbarTemplate>
+                        <button
+                          style="float: right;"
+                          mat-raised-button
+                          color="primary"
+                          [disabled]="
+                            projectsInProcessGrid.selectionService.selected
+                              .length == 0
+                          "
+                          (click)="openProjectInProcessDialog()"
+                        >
+                          View Progress
+                        </button>
+                        <button
+                          style="float: right; margin-right: 5px;"
+                          mat-raised-button
+                          color="primary"
+                          [disabled]="
+                            projectsInProcessLoading || openBudgetsLoading
+                          "
+                          (click)="getProjectsForCurrentFY()"
+                        >
+                          Refresh
+                          <mat-icon>refresh</mat-icon>
+                        </button>
+                      </ng-template>
+                      <kendo-grid-column
+                        class="dbl-click-col"
+                        title="Name"
+                        field="ProjectName"
+                      >
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                          <div
+                            class="dbl-click-div"
+                            (dblclick)="openProjectInProcessDialog()"
+                          >
+                            {{ dataItem.ProjectName }}
+                          </div>
+                        </ng-template>
+                      </kendo-grid-column>
+                    </kendo-grid>
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-card-content>
+            </mat-card>
+          </div> -->
+        </div>
+      </div>
+    </mat-card-content>
+  </div>
+</div>

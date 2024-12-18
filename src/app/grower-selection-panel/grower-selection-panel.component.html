@@ -1,0 +1,74 @@
+<!--loading bar-->
+<div *ngIf="!growersLoaded" style="display: table-row">
+  Please wait 
+  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.9  }" mode="indeterminate"></mat-progress-bar>
+</div>        
+
+<!--Grower list-->
+<div *ngIf="growersLoaded && !growerSelected">
+  Please select a grower by clicking on the button-
+</div>
+<div *ngIf="growersLoaded && growerSelected && !growerConfirmed" style="display: table-row" >
+  You have selected: {{currentlySelectedGrower.id}} - {{currentlySelectedGrower.farmName}}
+</div>
+<div  *ngIf="growersLoaded && !growerConfirmed" style="display: table-row" >
+  <ag-grid-angular 
+    #agGrid 
+    [ngStyle]="{'width.px': widthpx , 'height.px': heightpx}"
+    class="ag-theme-material"
+    [rowData]="growers" 
+    [columnDefs]="columnDefs"
+    (gridReady)="onGridReady($event)"
+    [rowSelection]="'single'"
+    [floatingFilter]="true"
+    (selectionChanged)="onSelectionChanged($event)"
+    [embedFullWidthRows]="true"
+    [animateRows]="true"
+    [pagination]="true"
+    [paginationAutoPageSize]="true"
+    [rowHeight]="42"
+    [suppressHorizontalScroll]="true"
+    [suppressRowClickSelection]="true"
+    [frameworkComponents]="frameworkComponents"
+    [modules]="modules">
+  </ag-grid-angular>
+</div>
+<!--confirm your choice-->
+<!-- <div *ngIf="growersLoaded && growerSelected && !growerConfirmed" style="display: table-row" >
+  <button 
+    mat-raised-button
+    type="button"
+    color="fdblue" 
+    (click)="confirmChoice()"
+    [matTooltip]="'Select ' + currentlySelectedGrower.id + ' - ' + currentlySelectedGrower.farmName"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>check</mat-icon>
+    Confirm Selection
+  </button>
+</div>        -->
+
+<!-- reset the choice -->
+<div *ngIf="growerConfirmed" style="display: table-row" [ngStyle]="{'width.px': widthpx * 0.9 }" >
+  <span>Farm: {{currentlySelectedGrower.id}} - {{currentlySelectedGrower.farmName}}</span>
+  <button 
+    mat-raised-button
+    *ngIf="!hideSelectAnother"
+    style="margin-left: 15px;"
+    type="button"
+    color="warn" 
+    (click)="resetChoice()"
+    
+    [hidden]="lock"
+    [matTooltip]="'Choose another grower'"
+    [matTooltipPosition]="'above'"
+  >
+    <mat-icon>undo</mat-icon>
+    Choose Another Grower
+  </button>
+</div>
+
+<!-- <div *ngIf="growerConfirmed && !hideSelectAnother" style="display: row; margin-bottom: 30px;" >  
+  
+  
+</div> -->

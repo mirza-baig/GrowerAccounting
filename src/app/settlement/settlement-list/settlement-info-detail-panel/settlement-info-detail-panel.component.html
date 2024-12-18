@@ -1,0 +1,135 @@
+<div [hidden]="visible" [ngStyle]="{'width.px' : innerWidth * 0.85, 'margin-left':'15px' }">
+  Please wait while the information loads
+  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.8 }" mode="indeterminate"></mat-progress-bar>
+</div>
+<div [hidden]="!visible"  [ngStyle]="{'width.px' : innerWidth * 0.85, 'margin-left':'15px' }">
+  <!-- <h6>Detailed Information</h6> -->
+  <table *ngIf="!!params" >
+    <!-- <tr>
+      <td class="rowLabel">Farm:</td>
+      <td>{{params.data.growerName}}</td>
+    </tr>
+    <tr>
+      <td class="rowLabel">Flock:</td>
+      <td>{{params.data.entity}}</td>
+    </tr>
+    <tr>
+      <td class="rowLabel">Settlement Amount:</td>
+      <td>{{params.data.settlementAmount | currency: 'USD' }}</td>
+    </tr>
+    <tr>
+      <td class="rowLabel">Net Payment:</td>
+      <td [ngStyle]="{ 'color' : 10 >  params.data.netGrowerPayment ? 'red' : 'black' }">{{params.data.netGrowerPayment | currency: 'USD' }}</td>
+    </tr> -->
+    <!-- todo - add a litle for starting amount, then one for net payment? -->
+  </table>
+
+  <!-- <h6 style="margin-top: 15px;">Deductions</h6> -->
+  <!--[editType]="'fullRow'"-->
+  <div *ngIf="deductionErrorList.length > 0" style="color: red">
+    <span>The following errors with deductions must be fixed:</span>
+    <ul>
+      <li *ngFor="let error of deductionErrorList">
+        {{error}}
+      </li>
+    </ul>
+  </div>
+  <ag-grid-angular
+    #deductionGrid
+    id="deductionGrid"
+    [hidden]="!deductionsLoaded"
+    style="width: 95%;"
+    [domLayout]="'autoHeight'"
+    class="ag-theme-material"
+    [rowData]="deductionRows"
+    [columnDefs]="deductionColumnDefs"
+    [rowHeight]="40"
+    [singleClickEdit]="true"
+    [stopEditingWhenGridLosesFocus]="true"
+    (gridReady)="onDeductionGridReady($event)"
+    [suppressHorizontalScroll]="true"
+    (cellValueChanged)="deductionValueChange($event)"
+    [frameworkComponents]="deductionFrameworkComponents"
+    [modules]="modules">
+  </ag-grid-angular>
+
+  <h6 style="margin-top: 15px;">Transfers</h6>
+  <span *ngIf="transfersLoaded && transferRows.length === 0">No Transfers Found!</span>
+  <ag-grid-angular
+    #transferGrid
+    style="width: 95%;"
+    [domLayout]="'autoHeight'"
+    id="transferGrid"
+    [hidden]="!transfersLoaded || transferRows.length === 0"
+    class="ag-theme-material"
+    [rowData]="transferRows"
+    [columnDefs]="transferColumnDefs"
+    [rowHeight]="40"
+    [singleClickEdit]="true"
+    [stopEditingWhenGridLosesFocus]="true"
+    [suppressHorizontalScroll]="true"
+    (cellValueChanged)="transferValueChange($event)"
+    (gridReady)="onTransferGridReady($event)"
+    [frameworkComponents]="transferFrameworkComponents"
+    [modules]="modules">
+  </ag-grid-angular>
+
+
+  <h6 style="margin-top: 15px;">Bank Note Payments</h6>
+  <span *ngIf="bankNotesLoaded && bankNoteRows.length === 0">No Bank Note Payments Found!</span>
+  <div *ngIf="bankNoteErrorList.length > 0" style="color: red">
+    <span>The following errors with note payments must be fixed:</span>
+    <ul>
+      <li *ngFor="let error of bankNoteErrorList">
+        {{error}}
+      </li>
+    </ul>
+  </div>
+
+  <ag-grid-angular
+    #noteGrid
+    id="mynoteGrid"
+    style="width: 95%;"
+    [domLayout]="'autoHeight'"
+    [hidden]="!bankNotesLoaded || bankNoteRows.length === 0"
+    class="ag-theme-material"
+    [rowData]="bankNoteRows"
+    [columnDefs]="bankNoteColumnDefs"
+    [stopEditingWhenGridLosesFocus]="true"
+    [rowHeight]="40"
+    (cellValueChanged)="bankNoteValueChange($event)"
+    (gridReady)="onBankNoteGridReady($event)"
+    [suppressHorizontalScroll]="true"
+    [singleClickEdit]="true"
+    [frameworkComponents]="bankNoteFrameworkComponents"
+    [modules]="modules">
+  </ag-grid-angular>
+
+</div>
+
+
+<div [hidden]="!visible" [ngStyle]="{'width.px' : innerWidth * 0.85 }" >
+  <div>
+    &nbsp;
+  </div>
+  <div>
+    <button
+      mat-raised-button
+      *ngIf="!!settlement && settlement.status.trim() !== 'Posted'"
+      type="button"
+      color="fdblue"
+      [disabled]="submitted || !changesMade"
+      (click)="submitForm()"
+      appDisabledForRole="Grower Accounting Read Only"
+    >
+    <mat-icon>save</mat-icon>
+      Submit
+    </button>
+
+
+  </div>
+
+
+</div>
+
+

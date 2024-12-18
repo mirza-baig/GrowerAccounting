@@ -1,0 +1,790 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!--Loading gif-->
+                  <div *ngIf="!transactionsLoaded" style="display: table-row">
+                    Please wait while your transaction information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>
+
+
+                  <div style="display: table-row">
+                    <button
+                      mat-raised-button
+                      type="button"
+                      color="fdblue"
+                      *ngIf="transactionsLoaded && batchHasErrors"
+                      (click)="showHideTransactions()"
+                      [matTooltip]="showAllTransactions ?
+                      'Click to only show error transactions'
+                      : 'Click to view all transactions'
+                      "
+                      [matTooltipPosition]="'above'"
+                    >
+                    <mat-icon *ngIf="batchHasErrors && !showAllTransactions">expand_more</mat-icon>
+                    <mat-icon *ngIf="batchHasErrors && showAllTransactions">expand_less</mat-icon>
+                      {{ showAllTransactions ? 'Show Only Error Transactions' : 'Show All Transactions' }}
+                    </button>
+                    <button
+                      style="margin-left: 15px;"
+                      *ngIf="transactionsLoaded && !lockSettlements && batchModel.status !=='Posted'"
+                      mat-raised-button
+                      type="button"
+                      color="fdblue"
+                      (click)="goToAdd()"
+                      [matTooltip]="'Add a new transaction to batch #' + id"
+                      [matTooltipPosition]="'above'"
+                    >
+                    <mat-icon>add</mat-icon>
+                      Add
+                    </button>
+                    <button
+                      style="margin-left: 15px;"
+                      *ngIf="transactionsLoaded"
+                      mat-raised-button
+                      type="button"
+                      color="warn"
+                      (click)="goHome()"
+                      [matTooltip]="'Return to the list of transaction batches'"
+                      [matTooltipPosition]="'above'"
+                    >
+                    <mat-icon>undo</mat-icon>
+                      Return to Batch List
+                    </button>
+                    <button
+                      *ngIf="transactionsLoaded && lockSettlements"
+                      mat-raised-button
+                      type="button"
+                      color="warn"
+                      (click)="goHome()"
+                      [matTooltip]="'Return to the list of transaction batches'"
+                      [matTooltipPosition]="'above'"
+                    >
+                    <mat-icon>undo</mat-icon>
+                      Return to Batch List
+                    </button>
+
+                    <!--Action buttons-->
+
+                      <button
+                        mat-raised-button
+                        *ngIf="transactionsLoaded"
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        (click)="printBatch()"
+                        [matTooltip]="'Print the batch #' + id"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-icon>print</mat-icon>
+                        Print Batch
+                      </button>
+
+                      <button
+                        mat-raised-button
+                        *ngIf="transactionsLoaded && isPcsBatch"
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        (click)="printCornelia()"
+                        [matTooltip]="'Print the batch #' + id"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-icon>print</mat-icon>
+                        Print Cornelia Transactions
+                      </button>
+
+                      <button
+                        mat-raised-button
+                        *ngIf="transactionsLoaded && isPcsBatch"
+                        style="margin-left: 15px;"
+                        type="button"
+                        color="fdblue"
+                        (click)="printLavonia()"
+                        [matTooltip]="'Print the batch #' + id"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-icon>print</mat-icon>
+                        Print Lavonia Transactions
+                      </button>
+
+                      <button
+                        *ngIf="!lockSettlements && transactionsLoaded  && batchModel.status !=='Posted' && transactions.length > 0"
+                        [disabled]="batchHasErrors || postSubmitted"
+                        style="margin-left: 15px;"
+                        mat-raised-button
+                        type="button"
+                        color="fdblue"
+                        (click)="postBatchModal = true"
+                        [matTooltip]="'Post the batch #' + id"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-spinner
+                        *ngIf="postSubmitted"
+                        [diameter]="35"
+                        style="float:right;"
+                      ></mat-spinner>
+                      <mat-icon>send</mat-icon>
+                        Post
+                      </button>
+                      <button
+                        *ngIf="!lockSettlements && transactionsLoaded  && batchModel.status ==='Posted'"
+                        [disabled]="undoSubmitted"
+                        style="margin-left: 15px;"
+                        mat-raised-button
+                        type="button"
+                        color="warn"
+                        (click)="undoBatchModal = true"
+                        [matTooltip]="'Undo the posted transactions in batch #' + id"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-spinner
+                        *ngIf="undoSubmitted"
+                        [diameter]="35"
+                        style="float:right;"
+                      ></mat-spinner>
+                      <mat-icon>lock_upon</mat-icon>
+                        Undo Transactions
+                      </button>
+                  </div>
+                  <div  *ngIf="lockLoaded && lockSettlements" style="display: table-row">
+                    There is currently a settlement batch in process, so it must be completed and posted before adding or editing transactions.
+                  </div>
+
+                  <div *ngIf="transactionsLoaded && batchHasErrors" style="display: table-row">
+                    There are transactions in this batch that contain errors that must be corrected prior to the batch being posted!
+                  </div>
+
+                  <!--Transaction list -->
+                  <div *ngIf="transactionsLoaded" style="display: table-row" >
+                    <ag-grid-angular
+                      #agGrid
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 270 }"
+                      class="ag-theme-material"
+                      [rowData]="transactions"
+                      [columnDefs]="columnDefs"
+                      (gridReady)="onGridReady($event)"
+                      [floatingFilter]="true"
+                      [embedFullWidthRows]="true"
+                      [animateRows]="true"
+                      [suppressHorizontalScroll]="true"
+                      [frameworkComponents]="frameworkComponents"
+                      (virtualRowRemoved)="virtualRowRemoved($event)"
+                      [pagination]="true"
+                      [paginationAutoPageSize]="true"
+                      [modules]="modules">
+                    </ag-grid-angular>
+                  </div>
+
+                  <div *ngIf="transactionsLoaded" style="display: table-row" >
+                    <!-- <table style="width: 300px;">
+                      <tr *ngFor="let total of transactionTypeTotals">
+                        <td>{{total.type.transactionType}}</td>
+                        <td>{{ total.total  | currency: 'USD' }}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: bold">Batch Total</td>
+                        <td style="font-weight: bold">{{ totalBatch  | currency: 'USD' }}</td>
+                      </tr>
+                    </table> -->
+                    <table [ngStyle]="{ 'width.px' : innerWidth * 0.95 }">
+                      <tr>
+                        <td>{{transactionTypeTotals[0].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[0].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[1].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[1].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[2].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[2].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[3].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[3].total  | currency: 'USD' }}</td>
+                      </tr>
+                      <tr>
+                        <td>{{transactionTypeTotals[4].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[4].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[5].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[5].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[6].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[6].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[7].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[7].total  | currency: 'USD' }}</td>
+                      </tr>
+                      <tr>
+                        <td>{{transactionTypeTotals[8].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[8].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[9].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[9].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[10].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[10].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[11].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[11].total  | currency: 'USD' }}</td>
+                      </tr>
+                      <tr>
+                        <td>{{transactionTypeTotals[12].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[12].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[13].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[13].total  | currency: 'USD' }}</td>
+                        <td>{{transactionTypeTotals[14].type.transactionType}}</td>
+                        <td>{{ transactionTypeTotals[14].total  | currency: 'USD' }}</td>
+                        <td style="font-weight: bold">Batch Total</td>
+                        <td style="font-weight: bold">{{ totalBatch  | currency: 'USD' }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Print Batch-->
+  <div [hidden]="true" @fade *ngIf="printReady" class="container-fluid" id="print-section-batch">
+    <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+      <h1> Batch Information </h1>
+      <h1 *ngIf="!!this.batchModel?.id">Batch #:
+        {{
+          this.batchModel.id
+        }}
+      </h1>
+      <!-- Budget Name, Description -->
+      <table class="GeneratedTable">
+        <tbody>
+          <tr>
+            <td>
+              Description
+            </td>
+            <td>
+              {{this.batchModel?.description}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Description
+            </td>
+            <td>
+              {{this.batchModel?.description}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Created By
+            </td>
+            <td>
+              {{this.batchModel?.createdBy}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Created Date
+            </td>
+            <td>
+              {{this.batchModel?.createdDate | date: 'MM/dd/yyyy' }}
+            </td>
+          </tr>
+          <tr *ngIf="transactionsLoaded && transactions.length > 0">
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <hr *ngIf="transactionsLoaded && transactions.length > 0"/>
+
+
+    <!-- End Prioritized Project Fields -->
+    <!-- Quarterly Spend Table -->
+    <h1 *ngIf="transactionsLoaded && transactions.length > 0">Transactions</h1>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style="width: 100%">
+      <th>Farm</th>
+      <th>Type</th>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <tbody>
+        <tr *ngFor="let transaction of transactions">
+          <td>{{transaction.growerName}}</td>
+          <td>{{transaction.transactionCode}}</td>
+          <td>{{transaction.transactionDate | date: 'MM/dd/yyyy' }}</td>
+          <td>{{transaction.transactionDescription}}</td>
+          <td>{{transaction.transactionAmount| currency: 'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h1 *ngIf="transactionsLoaded && transactions.length > 0">Totals</h1>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style=" border-spacing: 10px 0;">
+      <tbody>
+        <tr *ngFor="let total of transactionTypeTotals">
+          <td>
+            {{total.type.code + ' - ' + total.type.transactionType}}
+          </td>
+          <td>
+            {{total.total | currency: 'USD' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Total
+          </td>
+          <td>
+            {{this.totalBatch | currency: 'USD' }}
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <!--Totals-->
+    <hr *ngIf="transactionsLoaded && transactions.length > 0"/>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style=" border-spacing: 10px 0; margin-top: 20px;">
+      <tr>
+        <td>Report Totals</td>
+        <td>{{totalBatch | currency: 'USD' }}</td>
+      </tr>
+      <tr *ngFor="let item of vendorAccountTotals">
+        <td>{{item}} Totals</td>
+        <td>{{getGrowerAccountTotals(item, 'all') | currency: 'USD' }}</td>
+      </tr>
+      <tr>
+        <td>Intracompany Totals</td>
+        <td>{{getGrowerAccountTotals('intracompany', 'all') | currency: 'USD' }}</td>
+      </tr>
+      <tr>
+        <td>Outside Totals</td>
+        <td>{{getGrowerAccountTotals('outside', 'all') | currency: 'USD' }}</td>
+      </tr>
+    </table>
+
+    <!--Distributions-->
+    <table *ngIf="transactionsLoaded && glDists.length > 0" class="GeneratedTable" style="width: 100%; margin-top: 20px;">
+      <th>G/L NO.</th>
+      <th>Amount</th>
+      <th>Description</th>
+      <tbody>
+        <tr *ngFor="let dist of glDists">
+          <td>{{getGlAccountNoString(dist.glaccount)}}</td>
+          <td>{{ dist.amount | currency: 'USD'}}</td>
+          <td>{{ dist.accountName}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!--cornelia-->
+  <div [hidden]="true" @fade *ngIf="printReady" class="container-fluid" id="print-section-cornelia">
+    <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+      <h1> Batch Information </h1>
+      <h1 *ngIf="!!this.batchModel?.id">Batch #:
+        {{
+          this.batchModel.id
+        }}
+      </h1>
+      <!-- Budget Name, Description -->
+      <table class="GeneratedTable">
+        <tbody>
+          <tr>
+            <td>
+              Description
+            </td>
+            <td>
+              {{this.batchModel?.description}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Description
+            </td>
+            <td>
+              {{this.batchModel?.description}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Created By
+            </td>
+            <td>
+              {{this.batchModel?.createdBy}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Created Date
+            </td>
+            <td>
+              {{this.batchModel?.createdDate | date: 'MM/dd/yyyy' }}
+            </td>
+          </tr>
+          <tr *ngIf="transactionsLoaded && transactions.length > 0">
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <hr *ngIf="transactionsLoaded && transactions.length > 0"/>
+
+
+    <!-- End Prioritized Project Fields -->
+    <!-- Quarterly Spend Table -->
+    <h1 *ngIf="transactionsLoaded && transactions.length > 0">Transactions</h1>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style="width: 100%">
+      <th>Farm</th>
+      <th>Type</th>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <tbody>
+        <tr *ngFor="let transaction of corneliaTransactions">
+          <td>{{transaction.growerName}}</td>
+          <td>{{transaction.transactionCode}}</td>
+          <td>{{transaction.transactionDate | date: 'MM/dd/yyyy' }}</td>
+          <td>{{transaction.transactionDescription}}</td>
+          <td>{{transaction.transactionAmount| currency: 'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h1 *ngIf="transactionsLoaded && transactions.length > 0">Totals</h1>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style=" border-spacing: 10px 0;">
+      <tbody>
+        <tr *ngFor="let total of corneliaTypeTotals">
+          <td>
+            {{total.type.code + ' - ' + total.type.transactionType}}
+          </td>
+          <td>
+            {{total.total | currency: 'USD' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Total
+          </td>
+          <td>
+            {{this.totalCornelia | currency: 'USD' }}
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+    <!--Totals-->
+    <hr *ngIf="transactionsLoaded && transactions.length > 0"/>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style=" border-spacing: 10px 0;">
+      <tr>
+        <td>Report Totals</td>
+        <td>{{totalCornelia | currency: 'USD' }}</td>
+      </tr>
+      <tr *ngFor="let item of vendorAccountTotals">
+        <td>{{item}} Totals</td>
+        <td>{{getGrowerAccountTotals(item, 'cornelia') | currency: 'USD' }}</td>
+      </tr>
+      <tr>
+        <td>Intracompany Totals</td>
+        <td>{{getGrowerAccountTotals('intracompany', 'cornelia') | currency: 'USD' }}</td>
+      </tr>
+      <tr>
+        <td>Outside Totals</td>
+        <td>{{getGrowerAccountTotals('outside', 'cornelia') | currency: 'USD' }}</td>
+      </tr>
+    </table>
+
+    <!--Distributions-->
+    <table *ngIf="transactionsLoaded && glDists.length > 0" class="GeneratedTable" style="width: 100%; margin-top: 20px;">
+      <th>G/L NO.</th>
+      <th>Amount</th>
+      <th>Description</th>
+      <tbody>
+        <!-- <tr *ngFor="let dist of glDists">
+          <td>{{getGlAccountNoString(dist.glaccount)}}</td>
+          <td>{{ getGlTotalByStoreId(dist.glaccount, 'Cornelia') | currency: 'USD'}}</td>
+          <td>{{ dist.accountName}}</td>
+        </tr> -->
+        <tr>
+          <td>{{getGlAccountNoString(132500)}}</td>
+          <td>{{ getGlTotalByStoreId(132500, 'Cornelia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(132500)}}</td>
+        </tr>
+        <tr>
+          <td>{{getGlAccountNoString(150118)}}</td>
+          <td>{{ getGlTotalByStoreId(150118, 'Cornelia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(150118)}}</td>
+        </tr>
+        <tr>
+          <td>{{getGlAccountNoString(111800)}}</td>
+          <td>{{ getGlTotalByStoreId(111800, 'Cornelia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(111800)}}</td>
+        </tr>
+        <tr *ngIf="hasTransfers">
+          <td>{{getGlAccountNoString(160519)}}</td>
+          <td>{{ getGlTotalByStoreId(160519, 'Cornelia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(160519)}}</td>
+        </tr>
+        <tr *ngIf="hasTransfers">
+          <td>{{getGlAccountNoString(160518)}}</td>
+          <td>{{ getGlTotalByStoreId(160518, 'Cornelia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(160518)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--lavonia-->
+  <div [hidden]="true" @fade *ngIf="printReady" class="container-fluid" id="print-section-lavonia">
+    <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+      <h1> Batch Information </h1>
+      <h1 *ngIf="!!this.batchModel?.id">Batch #:
+        {{
+          this.batchModel.id
+        }}
+      </h1>
+      <!-- Budget Name, Description -->
+      <table class="GeneratedTable">
+        <tbody>
+          <tr>
+            <td>
+              Description
+            </td>
+            <td>
+              {{this.batchModel?.description}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Description
+            </td>
+            <td>
+              {{this.batchModel?.description}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Created By
+            </td>
+            <td>
+              {{this.batchModel?.createdBy}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Created Date
+            </td>
+            <td>
+              {{this.batchModel?.createdDate | date: 'MM/dd/yyyy' }}
+            </td>
+          </tr>
+          <tr *ngIf="transactionsLoaded && transactions.length > 0">
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <hr *ngIf="transactionsLoaded && transactions.length > 0"/>
+
+
+    <!-- End Prioritized Project Fields -->
+    <!-- Quarterly Spend Table -->
+    <h1 *ngIf="transactionsLoaded && transactions.length > 0">Transactions</h1>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style="width: 100%">
+      <th>Farm</th>
+      <th>Type</th>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <tbody>
+        <tr *ngFor="let transaction of lavoniaTransactions">
+          <td>{{transaction.growerName}}</td>
+          <td>{{transaction.transactionCode}}</td>
+          <td>{{transaction.transactionDate | date: 'MM/dd/yyyy' }}</td>
+          <td>{{transaction.transactionDescription}}</td>
+          <td>{{transaction.transactionAmount| currency: 'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h1 *ngIf="transactionsLoaded && transactions.length > 0">Totals</h1>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style=" border-spacing: 10px 0;">
+      <tbody>
+        <tr *ngFor="let total of lavoniaTypeTotals">
+          <td>
+            {{total.type.code + ' - ' + total.type.transactionType}}
+          </td>
+          <td>
+            {{total.total | currency: 'USD' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Total
+          </td>
+          <td>
+            {{this.totalLavonia | currency: 'USD' }}
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+    <!--Totals-->
+    <hr *ngIf="transactionsLoaded && transactions.length > 0"/>
+    <table *ngIf="transactionsLoaded && transactions.length > 0" class="GeneratedTable" style=" border-spacing: 10px 0;">
+      <tr>
+        <td>Report Totals</td>
+        <td>{{totalLavonia | currency: 'USD' }}</td>
+      </tr>
+      <tr *ngFor="let item of vendorAccountTotals">
+        <td>{{item}} Totals</td>
+        <td>{{getGrowerAccountTotals(item, 'lavonia') | currency: 'USD' }}</td>
+      </tr>
+      <tr>
+        <td>Intracompany Totals</td>
+        <td>{{getGrowerAccountTotals('intracompany', 'lavonia') | currency: 'USD' }}</td>
+      </tr>
+      <tr>
+        <td>Outside Totals</td>
+        <td>{{getGrowerAccountTotals('outside', 'lavonia') | currency: 'USD' }}</td>
+      </tr>
+    </table>
+
+    <!--Distributions-->
+    <table *ngIf="transactionsLoaded && glDists.length > 0" class="GeneratedTable" style="width: 100%; margin-top: 20px;">
+      <th>G/L NO.</th>
+      <th>Amount</th>
+      <th>Description</th>
+      <tbody>
+        <tr>
+          <td>{{getGlAccountNoString(132500)}}</td>
+          <td>{{ getGlTotalByStoreId(132500, 'Lavonia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(132500)}}</td>
+        </tr>
+        <tr>
+          <td>{{getGlAccountNoString(150119)}}</td>
+          <td>{{ getGlTotalByStoreId(150119, 'Lavonia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(150119)}}</td>
+        </tr>
+        <tr>
+          <td>{{getGlAccountNoString(111800)}}</td>
+          <td>{{ getGlTotalByStoreId(111800, 'Lavonia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(111800)}}</td>
+        </tr>
+        <tr *ngIf="hasTransfers">
+          <td>{{getGlAccountNoString(160519)}}</td>
+          <td>{{ getGlTotalByStoreId(160519, 'Lavonia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(160519)}}</td>
+        </tr>
+        <tr *ngIf="hasTransfers">
+          <td>{{getGlAccountNoString(160518)}}</td>
+          <td>{{ getGlTotalByStoreId(160518, 'Lavonia') | currency: 'USD'}}</td>
+          <td>{{ getAccountName(160518)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--Post Batch Modal-->
+
+  <div class="example-wrapper">
+    <kendo-dialog
+      *ngIf="postBatchModal"
+      (close)="postBatchModal = false"
+      [minWidth]="300"
+      [width]="300"
+      [height]="200"
+    >
+      <kendo-dialog-titlebar
+        style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+      >
+        <div
+          style="font-size: 18px; line-height: 1.3em; color: white !important;"
+        >
+          <span class="k-icon k-i-notification"></span> Post Batch
+        </div>
+      </kendo-dialog-titlebar>
+      <p>&nbsp;</p>
+      <span style="margin-top: 50px !important">Do you wish to post this batch and all of its transactions?</span>
+
+
+      <kendo-dialog-actions>
+        <button
+        mat-raised-button
+        color="warn"
+        style="width: 50% !important;"
+        (click)="postBatchModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+
+        style="width: 50% !important;"
+        (click)="submitPostBatchModal()"
+      >
+        Yes, Post Batch
+      </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+  </div>
+
+
+  <!--undo the transaction batch-->
+  <div class="example-wrapper">
+    <kendo-dialog
+      *ngIf="undoBatchModal"
+      (close)="undoBatchModal = false"
+      [minWidth]="300"
+      [width]="300"
+      [height]="200"
+    >
+      <kendo-dialog-titlebar
+        style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+      >
+        <div
+          style="font-size: 18px; line-height: 1.3em; color: white !important;"
+        >
+          <span class="k-icon k-i-notification"></span> Undo Batch
+        </div>
+      </kendo-dialog-titlebar>
+      <p>&nbsp;</p>
+      <span style="margin-top: 50px !important">Do you wish to un-post this batch and all of its transactions?</span>
+
+
+      <kendo-dialog-actions>
+        <button
+        mat-raised-button
+        color="warn"
+        style="width: 50% !important;"
+        (click)="undoBatchModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+
+        style="width: 50% !important;"
+        (click)="undoBatchModalSubmit()"
+      >
+        Yes, Undo Transactions
+      </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+  </div>
+

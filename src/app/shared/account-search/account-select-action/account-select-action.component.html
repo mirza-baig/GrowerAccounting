@@ -1,0 +1,15 @@
+<span>
+  <button
+    mat-raised-button
+    style="width: 170px;"
+    type="button"
+    color="fdblue"
+    (click)="selectAccount()"
+    [matTooltip]="'Select the account ' + params.data.accountType + ' - ' + params.data.accountSuffix"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>check</mat-icon>
+    Select Account
+  </button>
+</span>
+

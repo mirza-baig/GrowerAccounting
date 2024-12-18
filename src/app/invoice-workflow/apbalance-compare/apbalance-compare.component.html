@@ -1,0 +1,111 @@
+
+<!--show the header-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">
+                <!--Loading gif-->
+                <div *ngIf="!dataLoaded"  style="display: table-row">
+                  Please wait while the AP data loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>
+
+                <div *ngIf="dataLoaded"  style="display: table-row">
+                  Click the button to download spreadsheets containing all of the AS400 Test and Live data currently available for AP vouchers and app-farm-distribution-actions. Or click the Reset button to reset the test AS400 data for testing purposes
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    type="button"
+                    color="fdblue"
+                    (click)="exportData()"
+                    [disabled]="lockReset"
+                    [matTooltip]="'Download the current data for the test and live AS400 AP Invoice Voucher and Distribution files'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>file_download</mat-icon>
+                    Download AS400 Data
+                  </button>
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    type="button"
+                    color="warn"
+                    [disabled]="lockReset"
+                    (click)="exportData()"
+                    [matTooltip]="'Reset the test data for AS400 AP Invoice Voucher and Distribution Files'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-spinner
+                    *ngIf="lockReset"
+                    [diameter]="35"
+                    style="float:right;"
+                  ></mat-spinner>
+                  <mat-icon>refresh</mat-icon>
+                    Reset
+                  </button>
+                </div>
+
+
+
+
+                <!--Account list -->
+                <div *ngIf="dataLoaded" [hidden]="true" style="display: table-row" >
+                  <ag-grid-angular
+                    class="ag-theme-material"
+                    [rowData]="data.liveDists"
+                    [columnDefs]="distColumnDefs"
+                    (gridReady)="onLiveDistGridReady($event)"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                  <ag-grid-angular
+                    class="ag-theme-material"
+                    [rowData]="data.testDists"
+                    [columnDefs]="distColumnDefs"
+                    (gridReady)="onTestDistGridReady($event)"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                  <ag-grid-angular
+                    class="ag-theme-material"
+                    [rowData]="data.liveOpens"
+                    [columnDefs]="openColumnDefs"
+                    (gridReady)="onLiveOpenGridReady($event)"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                  <ag-grid-angular
+                    class="ag-theme-material"
+                    [rowData]="data.testOpens"
+                    [columnDefs]="openColumnDefs"
+                    (gridReady)="onTestOpenGridReady($event)"
+                    [modules]="modules">
+                  </ag-grid-angular>
+
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

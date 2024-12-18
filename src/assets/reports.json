@@ -1,0 +1,62 @@
+[
+  {
+    "Name": "(GRO250) Accounts Receivable Trial Balances",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO250+Accounts+Receivable+Trial+Balances&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "TEST_(GRO250) Accounts Receivable Trial Balances",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fTEST_GRO250+Accounts+Receivable+Trial+Balances&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO250C) Accounts Receivable Trial Balances - No Corp",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO250C+Accounts+Receivable+Trial+Balances_no+corp&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO420) YTD Grower AR Statement",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO420+YTD+Grower+AR+Statement&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(FLH410) Request for Egg Payment",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fFLH410+Request+For+Egg+Payment&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(FLB416) Request for Broiler Payment",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fFLB416+Request+For+Broiler+Payment&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO088) Egg Settlement Note Payment Edit",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO088+Egg+Settlement+Note+Payment+Edit&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO080H) Breeder Flock Settlement - A/R Deductions",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO080H+Breeder+AR+Deductions&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO085) Flock Settlement Note Payment Edit",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO085+Flock+Settlement+Note+Payment+Edit&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO080B) Broiler Flock Settlement - A/R Deductions",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO080B+Broiler+AR+Deductions&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO320) Customer A/R Statement",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO320+Customer+AR+Statement&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  },
+  {
+    "Name": "(GRO320) Customer A/R Statement By Farm Name",
+    "Url": "https://sql.fieldale.com/ReportServer/Pages/ReportViewer.aspx?%2fFieldale+Farms+SSRS%2fGrower+Accounting%2fGRO320+Customer+AR+Statement+By+Farm+Name&rs:Command=Render&rs:embed=true",
+    "Roles": "all"
+  }
+]

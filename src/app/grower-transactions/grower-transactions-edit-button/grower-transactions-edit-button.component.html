@@ -1,0 +1,54 @@
+<span *ngIf="params.data.Status.toString() === 'New'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit this transaction batch #' + params.data.Id"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>edit</mat-icon>
+  </button>
+</span>
+
+<span *ngIf="params.data.Status.toString() === 'Error'">
+  <button
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit/Fix this transaction batch #' + params.data.Id"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>build</mat-icon>
+  </button>
+</span>
+
+<span *ngIf="params.data.Status.toString() === 'Posted'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'View this transaction batch #' + params.data.Id"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>visibility</mat-icon>
+  </button>
+</span>
+
+<span *ngIf="params.data.Status.toString() !== 'Posted'">
+  <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatch()"
+    [matTooltip]="'Delete this transaction batch'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+</span>

@@ -1,0 +1,198 @@
+<div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" *ngIf="!loaded">
+  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.75 }" mode="indeterminate"></mat-progress-bar>
+</div>
+<div *ngIf="loaded" class="row"  [ngStyle]="{ 'width.px' : innerWidth * 0.85 }">
+  <div class="col-md-6">
+    <!--req info-->
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Farm
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{paymentRequest.farmName}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Vendor
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{paymentRequest.vendorName}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Company
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{companyName}}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Invoice Date
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{paymentRequest.invoice.invoiceDate | date: 'MM/dd/yyyy' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Pay Date
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{paymentRequest.invoice.paydate | date: 'MM/dd/yyyy' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Amount
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ paymentRequest.invoice.amount | currency: 'USD' }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Description
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ paymentRequest.invoice.description }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Account
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ account.accountType }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Status
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ paymentRequest.invoice.stage }}
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!!apInvoice" class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          Voucher #
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="display: table;">
+          {{ apInvoice.apvoucherId }}
+        </div>
+      </div>
+    </div>
+    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+      <div class="col-md-2">
+        <div style="display: table;">
+          File
+        </div>
+      </div>
+      <div class="col-md-4" *ngIf="!!paymentRequest.invoice.fileName">
+        <div style="display: table;">
+          <span style="cursor: pointer; text-decoration: underline;" (click)="displayFile()">
+            {{ paymentRequest.invoice.fileName }} <mat-icon>cloud_download</mat-icon>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4" *ngIf="!!!paymentRequest.invoice.fileName">
+        <div style="display: table;">
+          <span style="cursor: pointer; text-decoration: underline;" >
+            <b>No file included!</b>
+          </span>
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+
+  <!--todo - do we want the file here? -->
+
+  <!--distributions-->
+  <!-- <div class="col-md-6" *ngIf="distributions.length > 1"> -->
+    <div *ngIf="distributions.length > 1">
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        &nbsp;
+      </div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        Farm Distributions
+      </div>
+      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }" >
+        <div class="col-md-4">
+          <div style="display: table;">
+            Farm
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div style="display: table;">
+            Account
+          </div>
+        </div>
+        <!--todo - put the account here -->
+        <div class="col-md-2">
+          <div style="display: table;">
+            Amount
+          </div>
+        </div>
+      </div>
+      <div *ngFor="let dist of distributions" class="row" [ngStyle]="{'width.px' : innerWidth * 0.8 }">
+        <div class="col-md-4">
+          <div style="display: table;">
+            {{dist.name}}
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div style="display: table;">
+            <app-quick-account-text [id]="dist.growerAccountId"></app-quick-account-text>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div style="display: table;">
+            {{dist.amount | currency: 'USD'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

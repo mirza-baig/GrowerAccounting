@@ -1,0 +1,695 @@
+<!--New-->
+<span *ngIf="params.data.status === 'New' && loaded">
+  <button
+    mat-raised-button
+    *ngIf="!lockSettlements && !lockTransactions"
+    [disabled]="lockBegin"
+    type="button"
+    color="fdblue"
+    (click)="beginSettlement()"
+    [matTooltip]="'Open this settlement batch for editing settlement deductions'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-spinner
+    *ngIf="lockBegin"
+    [diameter]="35"
+    style="float:right;"
+  ></mat-spinner>
+  <mat-icon>add</mat-icon>
+    Begin
+  </button>
+  <button
+    *ngIf="!lockSettlements && !lockTransactions"
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatchModal = true"
+    [matTooltip]="'Delete this settlement batch'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+  <button
+    *ngIf="lockSettlements || lockTransactions"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatchModal = true"
+    [matTooltip]="'Delete this settlement batch'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+</span>
+
+<!--In Process-->
+<span *ngIf="params.data.status === 'InProcess'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit this batch\'s settlement deductions'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>edit</mat-icon>
+  </button>
+  <button
+    mat-raised-button
+    style="margin-left: 15px;"
+    type="button"
+    color="fdblue"
+    [disabled]="postBatchSubmitted"
+    (click)="postBatchSubmit()"
+    [matTooltip]="'Post this settlement batch'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-spinner
+    *ngIf="postBatchSubmitted"
+    [diameter]="35"
+    style="float:right;"
+  ></mat-spinner>
+  <mat-icon>send</mat-icon>
+    Post
+  </button>
+  <!-- <button
+    mat-raised-button
+    style="margin-left: 15px;"
+    type="button"
+    color="fdblue"
+    (click)="printBatchStart()"
+    [disabled]="!enablePrint"
+    [matTooltip]="'Print this settlement batch'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>print</mat-icon>
+    Print
+  </button> -->
+  <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatchModal = true"
+    [matTooltip]="'Delete this settlement batch'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+</span>
+
+<!--Posted-->
+<span *ngIf="params.data.status === 'Posted'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'View this settlement batch (read-only)'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>visibility</mat-icon>
+  </button>
+  <button
+    mat-raised-button
+    style="margin-left: 15px;"
+    type="button"
+    color="fdblue"
+    *ngIf="postBatchSubmitted"
+    [disabled]="postBatchSubmitted"
+    (click)="postBatchSubmit()"
+    [matTooltip]="'Post this settlement batch'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-spinner
+    *ngIf="postBatchSubmitted"
+    [diameter]="35"
+    style="float:right;"
+  ></mat-spinner>
+  <mat-icon>send</mat-icon>
+    Post
+  </button>
+  <button
+    mat-raised-button
+    style="margin-left: 15px;"
+    type="button"
+    color="fdblue"
+    (click)="printBatchStart()"
+    [disabled]="!printModelsLoaded && !enablePrint"
+    [matTooltip]="'Print this settlement batch'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>print</mat-icon>
+    Print
+  </button>
+</span>
+
+<!--Error-->
+<span *ngIf="params.data.status === 'Error'">
+  <button
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="goToFixErrors()"
+    [matTooltip]="'Fix the errors in this settlement batch so it can be processed'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>build</mat-icon>
+    Fix Errors
+  </button>
+  <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatchModal = true"
+    [matTooltip]="'Delete this settlement batch'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+</span>
+
+
+<!-- modals -->
+<!-- Post batch -->
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="postBatchModal"
+    (close)="postBatchModal = false"
+    [width]="350"
+    [height]="200"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px; z-index: 999999 !important;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> Post Batch
+      </div>
+    </kendo-dialog-titlebar>
+    <p style="z-index: 999999 !important; margin-top: 20px;">
+      Are you sure you wish to post this batch?
+    </p>
+
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="warn"
+      style="width: 50% !important; z-index: 999999 !important;"
+      (click)="postBatchModal = false"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      style="width: 50% !important; z-index: 999999 !important;"
+      (click)="postBatch()"
+    >
+      Yes, Post Batch
+    </button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>
+
+<!--Batch posting errors-->
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="postBatchErrorModal"
+    (close)="postBatchErrorModal = false"
+    [width]="550"
+    [height]="500"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px; z-index: 999999 !important;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> Post Batch
+      </div>
+    </kendo-dialog-titlebar>
+    <div style="z-index: 999999 !important; margin-top: 20px; width: 400px !important; word-wrap: normal !important;">
+      The settlement batch you are trying to post is incomplete. <br/> These settlements must have their net grower payments fixed first-
+
+
+    </div>
+    <ul>
+      <li *ngFor="let settlement of errorSettlements">{{settlement.entity}} - Net Payment: {{ settlement.netGrowerPayment  | currency: 'USD' }} </li>
+    </ul>
+
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="warn"
+      style="width: 50% !important; z-index: 999999 !important;"
+      (click)="postBatchErrorModal = false"
+    >
+      Close
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      style="width: 50% !important; z-index: 999999 !important;"
+      (click)="goToEdit()"
+    >
+      Go Fix Settlements
+    </button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>
+
+<!-- Delete batch -->
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="deleteBatchModal"
+    (close)="deleteBatchModal = false"
+    [width]="350"
+    [height]="200"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px; z-index: 999999 !important;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> Delete Batch
+      </div>
+    </kendo-dialog-titlebar>
+    <p style="z-index: 999999 !important; margin-top: 20px;">
+      Are you sure you wish to delete this batch?
+    </p>
+
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="warn"
+      style="width: 50% !important; z-index: 999999 !important;"
+      (click)="deleteBatchModal = false"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      style="width: 50% !important; z-index: 999999 !important;"
+      (click)="deleteBatch()"
+    >
+      Yes, Delete Batch
+    </button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>
+
+
+<!--Print Setttlement Batch-->
+
+
+<div [hidden]="true" *ngIf="printModelsLoaded" class="container-fluid" id="print-section-settlements">
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <h1> Settlement Batch Information </h1>
+    <h1>Settlement Batch #:
+      {{
+        this.params.value
+      }}
+    </h1>
+    <!-- Budget Name, Description -->
+    <table class="GeneratedTable">
+      <tbody>
+        <tr>
+          <td>
+            Type
+          </td>
+          <td>
+            {{this.params.data.type}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            {{this.params.data.description}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Created Date
+          </td>
+          <td>
+            {{ this.params.data?.createdDate | date: 'MM/dd/yyyy'}}
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+  </div>
+
+  <!--GL Distributions-->
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h2>Account Totals</h2>
+    <table class="GeneratedTable"  style="width: 60%">
+      <tbody>
+        <tr *ngFor="let total of glTotals">
+          <td>{{total.accountNo}}</td>
+          <td>{{total.accountName}}</td>
+          <td style="text-align: right">{{total.total | currency: 'USD' }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>A/R Totals</td>
+          <td style="text-align: right">{{ glTotalAmount | currency: 'USD'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h2>A/R Deductions</h2>
+    <table class="GeneratedTable"  style="width: 100%">
+      <tbody>
+        <tr style="font-weight: bold;">
+          <td>Flock No</td>
+          <td>Name</td>
+          <td>Age</td>
+          <td>Date</td>
+          <td>A/R Account</td>
+          <td>G/L Account</td>
+
+          <td>Amount</td>
+          <td>Type</td>
+          <td>Grower Pay</td>
+        </tr>
+        <tr *ngFor="let settlement of printSettlementListForDeductions; let index = index">
+          <td>{{settlement.flockNo}}</td>
+          <td>{{settlement.growerName}}</td>
+          <td>{{settlement.age}}</td>
+          <td>{{settlement.date | date: 'MM/dd/yyyy' }}</td>
+          <td>{{settlement.arAccount}}</td>
+          <td>{{settlement.glAccount}}</td>
+          <td style="text-align: right">{{settlement.amount | currency: 'USD' }}-</td>
+          <td>{{settlement.type}}</td>
+          <td *ngIf="!!settlement.flockNo" style="text-align: right">{{settlement.growerPay | currency: 'USD' }}</td>
+          <td *ngIf="!!!settlement.flockNo"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--Line Items-->
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h2>Entry Edit - Deductions</h2>
+    <table class="GeneratedTable"  style="width: 100%">
+      <tbody>
+        <tr style="font-weight: bold;">
+          <td>Acct No</td>
+          <td>Acct Name</td>
+          <td>A/R Type</td>
+          <td>Date</td>
+          <td>Qty</td>
+          <td style="text-align: right">Amount</td>
+          <td>Desc</td>
+          <td>Ref</td>
+          <td>LP A/R#</td>
+        </tr>
+        <tr *ngFor="let total of entryItems">
+          <td>{{total.accountNo}}</td>
+          <td>{{total.accountName.substring(7)}}</td>
+          <td>{{total.arType}}</td>
+          <td>{{total.date | date: 'MM/dd/yyyy'}}</td>
+          <td></td> <!--quantity-->
+          <td style="text-align: right">{{total.amount | currency: 'USD' }}</td>
+          <td>{{total.description}}</td>
+          <td></td> <!--ref-->
+          <td></td> <!--lp ar-->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--Note Payments-->
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h2>Egg Settlement Note Payment Edit</h2>
+    <table class="GeneratedTable"  style="width: 100%">
+      <tbody>
+        <tr style="font-weight: bold;">
+          <td>Flock No</td>
+          <td>Farm Name</td>
+          <td style="text-align: right">Grower Payment</td>
+          <td style="text-align: right">Regular Deduct</td>
+          <td style="text-align: right">Special Deduct</td>
+          <td style="text-align: right">Special Int</td>
+          <td style="text-align: right">Unique Deduct</td>
+          <td style="text-align: right">Unique Int</td>
+          <td style="text-align: right">Const</td>
+          <td>Vendor</td>
+          <td>Name</td>
+          <td style="text-align: right">Note Payment</td>
+          <td style="text-align: right">Cents/Dozen</td>
+          <td style="text-align: right">Dozen</td>
+        </tr>
+        <tr *ngFor="let note of printSettlementListForNotePayments">
+          <td>{{note.flockNo}}</td>
+          <td>{{note.growerName}}</td>
+          <td *ngIf="note.rowType === 'first'">{{note.growerPayment | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType !== 'first'" colspan="7"></td>
+          <td *ngIf="note.rowType === 'first'" style="text-align: right">{{getDeductionTotal('regular', note.settlementId) | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType === 'first'" style="text-align: right">{{getDeductionTotal('special', note.settlementId) | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType === 'first'" style="text-align: right">{{getDeductionTotal('special interest', note.settlementId) | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType === 'first'" style="text-align: right">{{getDeductionTotal('unique', note.settlementId) | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType === 'first'" style="text-align: right">{{getDeductionTotal('unique interest', note.settlementId) | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType === 'first'" style="text-align: right">{{getDeductionTotal('construction', note.settlementId) | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType !== 'last'">{{note.vendorNumber}}</td>
+          <td *ngIf="note.rowType !== 'last'">{{note.vendorName}}</td>
+          <td *ngIf="note.rowType !== 'last'" style="text-align: right">{{note.notePayment | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType !== 'last'" style="text-align: right">{{note.centsDozen | currency: 'USD' }}</td>
+          <td *ngIf="note.rowType !== 'last'" style="text-align: right">{{note.dozen }}</td>
+          <td *ngIf="note.rowType === 'last'"></td>
+          <td *ngIf="note.rowType === 'last'" colspan="4">
+            Net Grower - {{note.netGrower | currency: 'USD'}}
+          </td>
+        </tr>
+        <!--remember type last-->
+      </tbody>
+    </table>
+  </div>
+
+  <!--Note Payments-->
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h2>Entry Edit - Note Payments</h2>
+    <table class="GeneratedTable"  style="width: 100%">
+      <tbody>
+        <tr style="font-weight: bold;">
+          <td>Acct No</td>
+          <td>Acct Name</td>
+          <td>A/R Type</td>
+          <td>Date</td>
+          <td>Qty</td>
+          <td  style="text-align: right">Amount</td>
+          <td>Desc</td>
+          <td>Ref</td>
+          <td>LP A/R#</td>
+          <td>RRN</td>
+          <td>Tx Type</td>
+          <td>Tax Ex</td>
+        </tr>
+        <tr *ngFor="let total of allNotePayments">
+          <td>{{total.accountNo}}</td>
+          <td>{{total.growerName}}</td>
+          <td>R</td>
+          <td>{{total.settlementDate | date: 'MM/dd/yyyy'}}</td>
+          <td></td> <!--quantity-->
+          <td style="text-align: right">{{total.notePayment.adjustedPayment | currency: 'USD' }}</td>
+          <td>NOTE PAID-{{total.vendorNameOnly}}</td>
+          <td></td> <!--ref-->
+          <td>{{total.bankNote.noteVendorNumber}}</td> <!--lp ar-->
+          <td>{{total.rrnCounter}}</td>
+          <td>65</td>
+          <td>N</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--Transaction Totals-->
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <table class="GeneratedTable"  style="width: 50%">
+      <tbody>
+        <tr *ngFor="let total of transactionTotals">
+          <td>{{total.transactionType}}</td>
+          <td style="text-align: right">{{total.total | currency: 'USD' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!--Account Totals-->
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <table class="GeneratedTable"  style="width: 50%">
+      <tbody>
+        <tr *ngFor="let total of accountTotals">
+          <td>{{total.accountLabel}}</td>
+          <td style="text-align: right">{{total.total | currency: 'USD' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <div *ngFor="let settlement of printSettlementList" class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h1> Settlement Information </h1>
+    <h1>Settlement Entity #:
+      {{
+        settlement.settlement.entity
+      }}
+    </h1>
+    <!-- Budget Name, Description -->
+    <table class="GeneratedTable">
+      <tbody>
+        <tr>
+          <td>
+            Grower
+          </td>
+          <td>
+            {{settlement.settlement.growerName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Settlement Amount
+          </td>
+          <td>
+            {{ settlement.settlement.settlementAmount | currency: 'USD' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Dozen Eggs
+          </td>
+          <td>
+            {{settlement.settlement.dozenEggs}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Net Grower Payment
+          </td>
+          <td>
+            {{ settlement.settlement.netGrowerPayment | currency: 'USD' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Settlement Date
+          </td>
+          <td>
+            {{ settlement.settlement.settlementDate | date: 'MM/dd/yyyy'}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Statement Date
+          </td>
+          <td>
+            {{ settlement.settlement.statementDate | date: 'MM/dd/yyyy'}}
+          </td>
+        </tr>
+
+
+      </tbody>
+
+    </table>
+
+    <!--Deductions-->
+    <h1 *ngIf="settlement.deductionsLoaded && settlement.deductions.length > 0">Deductions</h1>
+    <table *ngIf="settlement.deductionsLoaded && settlement.deductions.length > 0" class="GeneratedTable" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Orig. Deduction</th>
+          <th>Orig. Interest</th>
+          <th>Adj. Deduction</th>
+          <th>Adj. Interest</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let deduction of settlement.deductions">
+          <td>{{deduction.growerAccountName}}</td>
+          <td>{{deduction.deduction.originalDeduction | currency: 'USD':'$':'0.0-0'}}</td>
+          <td>{{deduction.deduction.originalInterest | currency: 'USD':'$':'0.0-0'}}</td>
+          <td>{{deduction.deduction.adjustedDeduction | currency: 'USD':'$':'0.0-0'}}</td>
+          <td>{{deduction.deduction.adjustedInterest | currency: 'USD':'$':'0.0-0'}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--Note Payments-->
+    <h1 *ngIf="settlement.notePaymentsLoaded && settlement.notePayments.length > 0">Note Payments</h1>
+    <table *ngIf="settlement.notePaymentsLoaded && settlement.notePayments.length > 0" class="GeneratedTable" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Vendor Name</th>
+          <th>Original Payment</th>
+          <th>Adjusted Payment</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let notePayment of settlement.notePayments">
+          <td>{{notePayment.vendorName}}</td>
+          <td>{{notePayment.notePayment.originalPayment | currency: 'USD':'$':'0.0-0'}}</td>
+          <td>{{notePayment.notePayment.adjustedPayment | currency: 'USD':'$':'0.0-0'}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--Transfers-->
+    <h1 *ngIf="settlement.transfersLoaded && settlement.transfers.length > 0">Transfers</h1>
+    <table *ngIf="settlement.transfersLoaded && settlement.transfers.length > 0" class="GeneratedTable" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>From</th>
+          <th>From Grower</th>
+          <th>To</th>
+          <th>To Grower</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transfer of settlement.transfers">
+          <td>{{transfer.type}}</td>
+          <td>{{transfer.fromSettlement.entity}}</td>
+          <td>{{transfer.fromGrower.farmName}}</td>
+          <td>{{transfer.toSettlement.entity}}</td>
+          <td>{{transfer.toGrower.farmName}}</td>
+          <td>{{transfer.transferModel.transferAmount | currency: 'USD':'$':'0.0-0'}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  </div>
+
+
+</div>

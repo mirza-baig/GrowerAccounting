@@ -1,0 +1,60 @@
+
+<!--show the header-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">                  
+                <!--Loading gif-->
+                <div *ngIf="!resultsLoaded"  style="display: table-row">
+                  Please wait while the 1099 information loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>        
+                
+                
+
+                
+                <!--Account list -->
+                <div  *ngIf="resultsLoaded" style="display: table-row" >
+                  <ag-grid-angular 
+                    #agGrid 
+                    [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 150 }"
+                    class="ag-theme-material"
+                    [rowData]="growerItems" 
+                    [columnDefs]="columnDefs"
+                    (gridReady)="onGridReady($event)"
+                    [floatingFilter]="true"
+                    [embedFullWidthRows]="true"
+                    [animateRows]="true"
+                    [suppressHorizontalScroll]="true"
+                    [pagination]="true"
+                    [paginationAutoPageSize]="true"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                </div>         
+
+                
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

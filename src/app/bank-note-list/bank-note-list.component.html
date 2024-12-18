@@ -1,0 +1,93 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">                  
+                  <app-grower-selection-panel
+                    *ngIf="panelReady"
+                    [widthpx]="innerWidth * 0.9"
+                    [heightpx]="innerHeight - 200"
+                    [startingId]="startId"
+                    [lock]="false"
+                    [showAllGrowers]="false"
+                    [hideSelectAnother]="false"
+                    [filterIds]="null"
+                    [settlementsOnly]="false"
+                    (growerSelectedEvent)="onGrowerSelected($event)"
+                  >
+                  </app-grower-selection-panel>
+
+                  <!--Now that grower is selected show the bank notes-->
+                  <div *ngIf="growerIsSelected && !bankNotesLoaded" style="display: table-row">
+                    Please wait while the we load the bank notes for {{growerSelected.id}} - {{growerSelected.farmName}}
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>
+                        
+                  
+                  <!--acount header info-->
+                  <!-- <div *ngIf="!loadingAccount" style="display: table-row" > 
+                    <app-grower-account-header [id]="id"></app-grower-account-header>
+                  </div> -->
+                      
+                    
+
+
+                  <!--Bank Note list -->
+                  <div *ngIf="growerIsSelected && bankNotesLoaded" style="display: table-row; margin-top: 20px;" ></div>
+                    <button
+                    mat-raised-button
+                    *ngIf="growerIsSelected"
+                    type="button"
+                    color="fdblue"
+                    [matTooltip]="'Create a new bank note for ' + growerSelected.farmName"
+                    [matTooltipPosition]="'above'"
+                    (click)="addNewBankNote()"
+                  >
+                  
+                    <mat-icon>add</mat-icon>
+                    Add New Bank Note
+                  </button>    
+                  
+                  <div *ngIf="growerIsSelected && bankNotesLoaded" style="display: table-row" >
+                    <ag-grid-angular 
+                      #agGrid 
+                      [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 200 }"
+                      class="ag-theme-material"
+                      [rowData]="bankNotes" 
+                      [columnDefs]="columnDefs"
+                      (gridReady)="onGridReady($event)"
+                      [frameworkComponents]="frameworkComponents"
+                      [floatingFilter]="true"
+                      [embedFullWidthRows]="true"
+                      [animateRows]="true"
+                      [suppressHorizontalScroll]="true"
+                      [modules]="modules">
+                    </ag-grid-angular>
+                  </div>         
+
+                </div>
+                  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 

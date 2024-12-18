@@ -1,0 +1,231 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-md-12" style="margin-top:3px;">
+          <div class="content">
+            <div class="container-fluid">
+              <div class="row" style="width: 100%;">
+                <p class="page-title">
+                  {{pageTitle}}
+                </p>
+              </div>
+              <div class="row" style="width: 100%;">
+                <div class="col-xl-12">
+                  <div style="display: table">
+                    <!--Loading gif-->
+
+                    <div *ngIf="dropdownsLoaded && batchSelected" style="display: table-row; margin-top: 30px; margin-bottom: 50px !important;">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        color="primary"
+                        (click)="returnToBatch()"
+                      >
+                      <mat-icon>undo</mat-icon>
+                        Return to Batch
+                      </button>
+                    </div>
+                    <!--buffer-->
+                    <div style="display: table-row">
+                      &nbsp;
+                    </div>
+
+                    <div *ngIf="!dropdownsLoaded" style="display: table-row">
+                      Please wait while the transaction information loads
+                      <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                    </div>
+
+                    <!--farm search-->
+                    <div [hidden]="!(dropdownsLoaded)" style="display: table-row" >
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-1">
+                          <div style="display: table">
+                            Batch
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div style="display: table">
+                          {{batchNumber}}
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="invalidGrower" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <span style="font-weight: bold; color: red; margin-left: 15px;">
+                          The Grower # {{transactionModel.growerId}} for this transaction  is {{ InvalidWord }}. Please select a grower from the below list to fix this transaction.
+                        </span>
+
+                      </div>
+                      <app-grower-selection-panel
+                        *ngIf="mode === 'add' || (mode === 'edit' && !!transactionModel)"
+                        [widthpx]="innerWidth * 0.9"
+                        [heightpx]="innerHeight - 270"
+                        [startingId]="!!this.growerId ? this.growerId : 0"
+                        [lock]="false"
+                        [hideSelectAnother]="false"
+                        [showAllGrowers]="mode === 'edit' && transactionModel.transactionStatus.trim() === ''"
+                        [filterIds]="null"
+                        [settlementsOnly]="false"
+                        (growerSelectedEvent)="onGrowerSelected($event)"
+                      >
+                      </app-grower-selection-panel>
+
+                    </div>
+
+                    <!-- <div *ngIf="dropdownsLoaded && farmSelected && farmFormLoaded && accountsLoaded" style="display: table-row" >
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-1">
+                          <div style="display: table">
+                            Batch
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div style="display: table">
+                          {{batchNumber}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-1">
+                          <div style="display: table; margin-top: 5px;">
+                            Farm
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div style="display: table">
+                            {{selectedFarm.id}}
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                              {{selectedFarm.farmName}}
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>  -->
+                    <!-- <div *ngIf="dropdownsLoaded && farmSelected" style="display: table-row; margin-top: 30px; margin-bottom: 50px !important;">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        color="warn"
+                        (click)="selectAnotherFarm()"
+                      >
+                      <mat-icon>undo</mat-icon>
+                        Choose Another Farm
+                      </button>
+                    </div>   -->
+
+                    <!--Main Form-->
+                    <div  *ngIf="dropdownsLoaded && farmSelected" style="display: table-row; margin-top: 50px;">
+                      <form [formGroup]="transactionForm">
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Transaction Type</mat-label>
+                                <mat-select formControlName="TransactionType" placeholder="Transaction Type" >
+                                  <mat-option *ngFor="let item of transactionTypeList" [value]="item.code" >
+                                    {{ item.code }} - {{item.transactionType}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Account</mat-label>
+                                <mat-select formControlName="Account" placeholder="Account" >
+                                  <mat-option *ngFor="let item of accountList" [value]="item.id" >
+                                      {{ item.accountType }} - {{item.accountSuffix}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                          <div class="col-md-3">
+                            <div style="display: table">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Date</mat-label>
+                                <input name="Date" formControlName="Date"   placeholder="Date"   matInput [matDatepicker]="picker"  (dateChange)="onDateChange($event)"  />
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+
+                                <mat-checkbox style="margin-left: 10px; margin-top: 20px;" formControlName="TaxExempt" value=''>Tax Exempt</mat-checkbox>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Description</mat-label>
+                                <input type="text" name="Description" matInput placeholder="Description" formControlName="Description" >
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Reference #</mat-label>
+                                <input type="text" matInput placeholder="Reference #" formControlName="ReferenceNumber"  >
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Quantity</mat-label>
+                                <input type="number" matInput placeholder="Quantity" formControlName="Quantity"  >
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div style="display: table" [formGroup]="transactionForm" >
+                              <mat-form-field appearance="outline">
+                                <mat-label>Amount</mat-label>
+                                <input type="text" currencyMask matInput placeholder="Amount" formControlName="Amount"  [options]="{ allowNegative: true, inputMode: 'NATURAL' }" >
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div *ngIf="dropdownsLoaded && farmSelected && accountsLoaded" style="display: table-row; margin-top: 30px;">
+                      <button
+                        mat-raised-button
+                        type="button"
+                        color="fdblue"
+                        [disabled]="!transactionForm.valid || submitted"
+                        (click)="submitTransaction()"
+                      >
+                      <mat-spinner
+                        *ngIf="submitted"
+                        [diameter]="35"
+                        style="float:right;"
+                      ></mat-spinner>
+                      <mat-icon>send</mat-icon>
+                        Submit
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

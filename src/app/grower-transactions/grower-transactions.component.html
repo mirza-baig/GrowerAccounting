@@ -1,0 +1,146 @@
+
+<!--show the header-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">                  
+                <!--Loading gif-->
+                <div [hidden]="!batchesLoading"  style="display: table-row">
+                  Please wait while the transaction information loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>        
+                
+                
+
+                <div [hidden]="batchesLoading" style="display: table-row; margin-top: 30px;">
+                  <button 
+                    mat-raised-button
+                    type="button"
+                    color="fdblue" 
+                    (click)="newBatchModal = true"
+                    [matTooltip]="'Add a new transaction batch'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>add</mat-icon>
+                    Add New Batch
+                  </button>
+                  <button 
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    type="button"
+                    color="fdblue" 
+                    (click)="showHideBatches()"
+                    [matTooltip]="showAllBatches ? 
+                    'Click to only show open transaction batches'
+                    : 'Click to view all transaction batches'
+                    "
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon *ngIf="!showAllBatches">expand_more</mat-icon>
+                  <mat-icon *ngIf="showAllBatches">expand_less</mat-icon>
+                    {{ showAllBatches ? 'Show Open Batches' : 'Show All Batches' }}
+                  </button>
+                </div>
+
+
+                <!--Account list -->
+                <div  [hidden]="batchesLoading" style="display: table-row" >
+                  <ag-grid-angular 
+                    #agGrid 
+                    [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 150 }"
+                    class="ag-theme-material"
+                    [rowData]="batches" 
+                    [columnDefs]="columnDefs"
+                    (gridReady)="onGridReady($event)"
+                    [frameworkComponents]="frameworkComponents"
+                    [floatingFilter]="true"
+                    [embedFullWidthRows]="true"
+                    [animateRows]="true"
+                    [suppressHorizontalScroll]="true"
+                    [pagination]="true"
+                    [paginationAutoPageSize]="true"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                </div>         
+
+                
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Add new batch modal-->
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="newBatchModal"
+    (close)="newBatchModal = false"
+    [minWidth]="400"
+    [width]="400"
+    [height]="300"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> New Batch
+      </div>
+    </kendo-dialog-titlebar>
+    <p>&nbsp;</p>
+    <span style="margin-top: 50px !important">Enter a description for the new batch</span>
+    <form [formGroup]="batchForm">
+      <div class="row" style="margin-top: 10px;">                          
+        
+          <div style="display: table;" *ngIf="batchFormLoaded" [formGroup]="batchForm" >
+            <mat-form-field appearance="outline" style="width: 350px;">
+              <mat-label>Description</mat-label>
+              <textarea matInput placeholder="Description" formControlName="Description" rows="5" ></textarea>
+            </mat-form-field>  
+          </div>
+        
+      </div>
+    </form>
+    
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="warn"
+      style="width: 50% !important;"
+      (click)="newBatchModal = false"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!batchForm.valid"
+      style="width: 50% !important;"
+      (click)="addNewTransactionBatch()"
+    >
+      Create New Batch
+    </button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>

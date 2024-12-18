@@ -1,0 +1,3 @@
+.mat-dialog-container, .cdk-overlay-pane {
+    width: 400px !important;
+}

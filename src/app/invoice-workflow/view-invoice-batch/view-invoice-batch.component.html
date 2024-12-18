@@ -1,0 +1,485 @@
+
+<!--show the header-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">
+                <!--Loading gif-->
+                <div *ngIf="!invoicesLoaded"  style="display: table-row">
+                  Please wait while the batch loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                </div>
+
+
+
+                <div *ngIf="invoicesLoaded" style="display: table-row; margin-top: 30px;">
+                  <button
+                    mat-raised-button
+                    type="button"
+                    color="fdblue"
+                    *ngIf="batch.stage === 'New'"
+                    (click)="addNewInvoice()"
+                    [matTooltip]="'Add a new Invoice Payment Request'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>add</mat-icon>
+                    Add Payment Request
+                  </button>
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    type="button"
+                    color="fdblue"
+                    (click)="returnToList()"
+                    [matTooltip]="'Return '"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>undo</mat-icon>
+                    Return to List
+                  </button>
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoiceItems.length > 0"
+                    type="button"
+                    color="fdblue"
+                    (click)="printBatch()"
+                    [matTooltip]="'Print the invoices in this batch (Full)'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>print</mat-icon>
+                    Print Invoice Batch (Full)
+                  </button>
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoiceItems.length > 0"
+                    type="button"
+                    color="fdblue"
+                    (click)="printBatchTrim()"
+                    [matTooltip]="'Print the invoices in this batch'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>print</mat-icon>
+                    Print Invoice Batch (Trim)
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoiceItems.length > 0"
+                    type="button"
+                    color="fdblue"
+                    (click)="exportData()"
+                    [matTooltip]="'Print the invoices in this batch'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>cloud_download</mat-icon>
+                    Export to Excel
+                  </button>
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="freshBatch && (batch.stage === 'LPO Review' || batch.stage === 'Accounting Approval')"
+                    type="button"
+                    color="fdblue"
+                    (click)="resendApprovalEmail()"
+                    [matTooltip]="'Return '"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-icon>email</mat-icon>
+                    Resend Approval Email
+                  </button>
+                  <!--*ngIf="invoiceItems.length > 0 && batch.stage === 'New'"  -->
+                  <button
+                    mat-raised-button
+                    style="margin-left: 15px;"
+                    *ngIf="invoiceItems.length > 0 && batch.stage === 'New'"
+                    type="button"
+                    color="fdblue"
+                    (click)="submitForApproval()"
+                    [disabled]="submittedPost"
+                    [matTooltip]="'Submit the invoice payment request batch for approval by LPO/Accounting'"
+                    [matTooltipPosition]="'above'"
+                  >
+                  <mat-spinner
+                    *ngIf="submittedPost"
+                    [diameter]="35"
+                    style="float:right;"
+                  ></mat-spinner>
+                  <mat-icon>send</mat-icon>
+                    Submit for Approval
+                  </button>
+                </div>
+                <div *ngIf="invoicesLoaded && approverFormLoaded && batch.stage === 'New'" style="display: table-row; margin-top: 30px;">
+                  <br/>
+                  <form [formGroup]="approverForm">
+                    <mat-form-field appearance="outline" style="width: 300px;">
+                      <mat-label>Approver</mat-label>
+                      <mat-select placeholder="Approver" formControlName="Approver" [formGroup]="approverForm" (selectionChange)="approverChange($event)">
+                        <mat-option *ngFor="let approver of approverList" [value]="approver.id">
+                          {{ approver.firstName + " " + approver.lastName }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div *ngIf="invoicesLoaded && batch.stage !== 'New'" style="display: table-row; margin-top: 30px;">
+                  <span *ngIf="batch.stage === 'Cancelled'">
+                    This invoice payment request batch has been cancelled. Click on the invoices to view cancellation reasons
+                  </span>
+                  <span *ngIf="batch.stage === 'Exported'">
+                    This invoice payment request batch has been fully processed
+                  </span>
+                  <span *ngIf="batch.stage !== 'Cancelled' && batch.stage !== 'Exported'">
+                    This invoice payment request batch is currently in the approval process and cannot be edited
+                  </span>
+                </div>
+
+
+                <!--Account list -->
+                <div *ngIf="invoicesLoaded" style="display: table-row" >
+                  <ag-grid-angular
+                    #agGrid
+                    [ngStyle]="{'width.px':innerWidth * 0.95, 'height.px': innerHeight - 250 }"
+                    class="ag-theme-material"
+                    [rowData]="invoiceItems"
+                    [columnDefs]="columnDefs"
+                    (gridReady)="onGridReady($event)"
+                    [frameworkComponents]="frameworkComponents"
+                    [floatingFilter]="true"
+                    [embedFullWidthRows]="true"
+                    [animateRows]="true"
+                    [suppressHorizontalScroll]="true"
+                    [pagination]="false"
+                    [paginationAutoPageSize]="false"
+                    [modules]="modules">
+                  </ag-grid-angular>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--Print Batch (new)-->
+<div [hidden]="true" @fade *ngIf="printReady" class="container-fluid" style="display: none;" id="print-section-batch">
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <h1> Batch Information </h1>
+    <h1 *ngIf="!!this.batch?.id">Batch #:
+      {{
+        this.batch.id
+      }}
+    </h1>
+    <!-- Budget Name, Description -->
+    <table class="GeneratedTable">
+      <tbody>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            {{this.batch?.description}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Created By
+          </td>
+          <td>
+            {{this.batch?.createdBy}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Created Date
+          </td>
+          <td>
+            {{this.batch?.createdDate | date: 'MM/dd/yyyy' }}
+          </td>
+        </tr>
+        <tr *ngIf="invoicesLoaded && invoiceItems.length > 0">
+
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+
+  <div *ngFor="let invoice of invoiceItems" class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <hr />
+    <h1 *ngIf="!!invoice?.invoice.invoiceNumber">Invoice #:
+      {{
+        invoice.invoice.invoiceNumber
+      }}
+    </h1>
+    <table class="GeneratedTable">
+      <tbody>
+        <tr>
+          <td>
+            Invoice Voucher #
+          </td>
+          <td>
+            {{invoice?.invoice.apvoucherId}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            {{invoice?.invoice.description}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Invoice Number
+          </td>
+          <td>
+            {{invoice?.invoice.invoiceNumber}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Grower
+          </td>
+          <td>
+            {{invoice?.farmName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Account
+          </td>
+          <td>
+            {{invoice?.accountName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Vendor
+          </td>
+          <td>
+            {{invoice?.vendorName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Invoice Date
+          </td>
+          <td>
+            {{invoice?.invoice.invoiceDate | date: 'MM/dd/yyyy' }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Company
+          </td>
+          <td>
+            {{invoice?.invoice.company}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Remittance Note
+          </td>
+          <td>
+            {{invoice?.invoice.remittanceNote}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Request Amount
+          </td>
+          <td>
+            {{invoice?.invoice.amount | currency: 'USD'}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Actual Amount
+          </td>
+          <td>
+            {{invoice?.apAmount | currency: 'USD'}}
+          </td>
+        </tr>
+        <tr *ngIf="invoice.invoice.apinvoicePaymentFarmDistribution.length > 0"> <!--at 1 it skips the solo ones-->
+          <td colspan="2">
+            <h1>Farm Distributions</h1>
+            <table class="GeneratedTable" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Farm</th>
+                  <!-- <th>Account</th> -->
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let distribution of invoice.invoice.apinvoicePaymentFarmDistribution">
+                  <td>{{getGrowerName(distribution.growerId)}}</td>
+                  <!-- <td>{{getAccountName(distribution.growerAccountId)}}</td> -->
+                  <td>{{invoice.invoice.amount | currency: 'USD'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <!-- <tr *ngIf="invoicesLoaded && invoiceItems.length > 0">
+
+        </tr> -->
+      </tbody>
+
+    </table>
+  </div>
+
+
+  <!-- End Prioritized Project Fields -->
+  <!-- Quarterly Spend Table -->
+  <!-- <h1 *ngIf="invoicesLoaded && invoiceItems.length > 0">Invoices</h1>
+  <table *ngIf="invoicesLoaded && invoiceItems.length > 0" class="GeneratedTable" style="width: 100%">
+    <th>Farm</th>
+    <th>Vendor</th>
+    <th>Description</th>
+    <th>Company</th>
+    <th>Amount</th>
+    <tbody>
+      <tr *ngFor="let invoice of invoiceItems">
+        <td>{{invoice.farmName}}</td>
+        <td>{{invoice.vendorName}}</td>
+        <td>{{invoice.invoice.description}}</td>
+        <td>{{invoice.invoice.company}}</td>
+        <td>{{invoice.invoice.amount | currency: 'USD'}}</td>
+      </tr>
+    </tbody>
+  </table> -->
+</div>
+
+
+
+<!--Print Batch-->
+<div [hidden]="true" *ngIf="printReady" class="container-fluid" style="display: none;" id="print-section-batch-trim">
+  <div class="col-xl-4" style="padding-left: 0; padding-right: 0;">
+    <h1> Batch Information </h1>
+    <h1 *ngIf="!!this.batch?.id">Batch #:
+      {{
+        this.batch.id
+      }}
+    </h1>
+    <!-- Budget Name, Description -->
+    <table class="GeneratedTable">
+      <tbody>
+        <tr>
+          <td>
+            Description
+          </td>
+          <td>
+            {{this.batch?.description}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Created By
+          </td>
+          <td>
+            {{this.batch?.createdBy}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Created Date
+          </td>
+          <td>
+            {{this.batch?.createdDate | date: 'MM/dd/yyyy' }}
+          </td>
+        </tr>
+        <tr *ngIf="invoicesLoaded && invoiceItems.length > 0">
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr *ngIf="invoicesLoaded && invoiceItems.length > 0"/>
+
+
+  <!-- End Prioritized Project Fields -->
+  <!-- Quarterly Spend Table -->
+  <h1 *ngIf="invoicesLoaded && invoiceItems.length > 0">Invoices</h1>
+  <table *ngIf="invoicesLoaded && invoiceItems.length > 0" class="GeneratedTable" style="width: 100%">
+    <tr>
+      <th>Farm</th>
+      <th>Vendor</th>
+      <th>Description</th>
+      <th>Amount</th>
+    </tr>
+    <tbody>
+      <tr *ngFor="let invoice of invoiceItems">
+        <td style="vertical-align: top;" *ngIf="invoice.invoice.apinvoicePaymentFarmDistribution.length === 1">
+          {{invoice.farmName}}
+        </td>
+        <td style="vertical-align: top;" *ngIf="invoice.invoice.apinvoicePaymentFarmDistribution.length > 1">
+          <p>Multiple Growers (see below)</p>
+          <p *ngFor="let distribution of invoice.invoice.apinvoicePaymentFarmDistribution">
+            {{getGrowerName(distribution.growerId)}}
+          </p>
+        </td>
+        <td style="vertical-align: top;">{{invoice.vendorName}}</td>
+        <td style="vertical-align: top;">{{invoice.invoice.description}}</td>
+        <td  style="vertical-align: top;" *ngIf="invoice.invoice.apinvoicePaymentFarmDistribution.length === 1">
+          {{invoice.invoice.amount | currency: 'USD'}}
+        </td>
+        <td  style="vertical-align: top;" *ngIf="invoice.invoice.apinvoicePaymentFarmDistribution.length > 1">
+          <p>{{invoice.invoice.amount | currency: 'USD'}}</p>
+          <p *ngFor="let distribution of invoice.invoice.apinvoicePaymentFarmDistribution">
+            {{distribution.amount | currency: 'USD'}}
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!--
+
+
+    <td colspan="2">
+      <h1>Farm Distributions</h1>
+      <table class="GeneratedTable" style="width: 100%">
+        <th>Farm</th>
+
+        <th>Amount</th>
+        <tbody>
+          <tr *ngFor="let distribution of invoice.invoice.apinvoicePaymentFarmDistribution">
+            <td>{{getGrowerName(distribution.growerId)}}</td>
+
+            <td>{{invoice.invoice.amount | currency: 'USD'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+-->

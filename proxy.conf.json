@@ -1,0 +1,13 @@
+{
+    "/api": {
+        "target": "https://webserv2.fieldale.com:448/api",
+        "secure": true,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/api": ""
+        }
+    }
+}
+
+
+

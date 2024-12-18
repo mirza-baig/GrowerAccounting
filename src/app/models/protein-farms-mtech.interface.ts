@@ -1,0 +1,74 @@
+
+
+export interface IProteinFarmsMtech {
+	activeFlag: string;
+	address1: string;
+	address2: string;
+	constructionStatus: string;
+	creationDate: string;
+	farmName: string;
+	farmNo: string;
+	farmStage: string;
+	farmType: string;
+	fdsaFeedDeliveryAreasIrn: string;
+	fdsaFormulaNoAssignmentsIxIrn: string;
+	feedCapacity: string;
+	feedDeliveryHold: string;
+	irn: string;
+	lastModDate: string;
+	latitude: string;
+	longitude: string;
+	maxTruckCapacity: string;
+	nonBulkFlag: string;
+	premiseId: string;
+	proteinCitiesIrn: string;
+	proteinCostCentersIrn: string;
+	proteinCountiesIrn: string;
+	proteinFacilityFeedMillsIrn: string;
+	proteinFacilityPlantsIrn: string;
+	proteinGrowoutCodesIrn: string;
+	proteinStatesIrn: string;
+	proteinTechAdvisorsIrn: string;
+	proteinTechSupervisorsIrn: string;
+	proteinVendorsIrn: string;
+	replicationDateTime: string;
+	totalHouseArea: string;
+	zip: string;
+	proteinMarketPriceAreasIrn: string;
+	proteinFarmOwnershipsIrn: string;
+	telephoneNo: string;
+	telephoneNoFax: string;
+	telephoneNoMobile: string;
+	liveHaulDays: string;
+	growerType: string;
+	fdsaPerformanceFactor: string;
+	comments: string;
+	replicaSourceId: string;
+	housesUniformFlag: string;
+	abfeedBinsFlag: string;
+	projectFeedDeliveriesFlag: string;
+	omcustomersIrn: string;
+	planningOnlyFlag: string;
+	futureActiveDate: string;
+	futureInActiveDate: string;
+	virtualFlag: string;
+	address3: string;
+	address4: string;
+	externalId: string;
+	creationUserId: string;
+	userId: string;
+	farmFeedDeliveryGranularity: string;
+	urlvalue: string;
+	entityPrefix: string;
+	proteinWarehousesIrn: string;
+	feedDeliveryHoldComment: string;
+	surveyRequiredFlag: string;
+	maxTruckWeightCapacity: string;
+	proteinCountriesIrn: string;
+	growerId: string;
+	u911City: string;
+	email: string;
+	sonarFlag: string;
+}
+
+

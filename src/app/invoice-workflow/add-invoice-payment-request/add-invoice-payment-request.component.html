@@ -1,0 +1,540 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}{{batchId}}
+              </p>
+            </div>
+            <div  *ngIf="!dropdownsLoaded" style="display: table-row">
+              Please wait while the information loads
+              <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+            </div>
+            <perfect-scrollbar
+                [autoPropagation]="true"
+                [ngStyle]="{
+                  width: innerWidth * 0.95,
+                  height: 'calc(100vh - 180px)'
+                }"
+            >
+
+
+            <div *ngIf="dropdownsLoaded && farmVendorFormLoaded && !showForm" @fadeInSlideOutRight class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!--farm search-->
+
+
+                  <div style="display: table-row" >
+
+                    <form [formGroup]="farmVendorForm">
+                      <!--Company-->
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-1">
+                          <div style="display: table; margin-top: 5px;">
+                            Company
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 300px;">
+                              <mat-label>Company</mat-label>
+                              <mat-select placeholder="Company" formControlName="Company" [formGroup]="farmVendorForm">
+                                <mat-option [value]=""></mat-option>
+                                <mat-option *ngFor="let company of companyList" [value]="company.Value">
+                                  {{ company.Value + " - " + company.Text }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <!--Farm-->
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-1">
+                          <div style="display: table; margin-top: 5px;">
+                            Grower
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Grower Id</mat-label>
+                              <input type="number" matInput placeholder="0" formControlName="GrowerId" [formGroup]="farmVendorForm" (keyup)="growerIdSearch($event)" >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 300px;">
+                              <mat-label>Grower Name</mat-label>
+                              <input
+                                type="text"
+                                placeholder="Grower Name"
+                                aria-label="string"
+                                matInput
+                                formControlName="GrowerName"
+                                [matAutocomplete]="auto2"
+                              />
+                              <mat-autocomplete
+                                autoActiveFirstOption
+                                (opened)="growerAutocompleteOpen()"
+                                (optionSelected)="growerAutocompleteSelected($event)"
+                                #auto2="matAutocomplete"
+                                style="width: 570px !important;"
+                              >
+                                <mat-option
+                                  *ngFor="let farm of filteredFarms | async; trackBy: trackByGrower"
+                                  [value]="farm.farmName"
+                                >
+                                  {{ farm.farmName }}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <!--Vendor-->
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-1">
+                          <div style="display: table; margin-top: 5px;">
+                            Vendor
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Vendor Number</mat-label>
+                              <input type="number" matInput placeholder="0" formControlName="VendorNumber" [formGroup]="farmVendorForm" (keyup)="vendorNumberSearch($event)" >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 300px;">
+                              <mat-label>Vendor Name</mat-label>
+                              <input
+                                type="text"
+                                placeholder="Vendor Name"
+                                aria-label="string"
+                                matInput
+                                formControlName="VendorName"
+                                [matAutocomplete]="auto"
+                              />
+                              <mat-autocomplete
+                                autoActiveFirstOption
+                                (opened)="vendorAutocompleteOpen()"
+                                (optionSelected)="vendorAutocompleteSelected($event)"
+                                #auto="matAutocomplete"
+                                style="width: 570px !important;"
+                              >
+
+                                <mat-option
+                                  *ngFor="let vendor of filteredVendors | async; trackBy: trackById"
+                                  [value]="vendor.vname"
+                                >
+                                  {{ vendor.vname }}
+                                </mat-option>
+                              </mat-autocomplete>
+                              <!-- <mat-error *ngIf="vendorLength < 5">
+                                Vendor Name search requires at least 5 characters
+                              </mat-error> -->
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+                  </div>
+                  <div  style="display: table-row; margin-top: 30px;">
+                    <button
+                      mat-raised-button
+                      type="button"
+                      color="fdblue"
+                      [disabled]="!farmVendorForm.valid && !!selectedGrower && !!selectedVendor"
+                      (click)="confirmSelections()"
+                    >
+                      Confirm Selection
+                    </button>
+                    <button
+                      style="margin-left: 15px;"
+                      mat-raised-button
+                      type="button"
+                      color="warn"
+                      (click)="returnToList()"
+                    >
+                    <mat-icon>undo</mat-icon>
+                      Return to Batch
+                    </button>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+
+            <div @fadeInSlideOutRight *ngIf="dropdownsLoaded && showForm"  class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+
+
+
+                  <div style="display: table-row" >
+                    <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                      <div class="col-md-4">
+                        <table>
+                          <tr>
+                            <td>Company</td>
+                            <td>{{companyName}}</td>
+                          </tr>
+                          <tr>
+                            <td>Grower</td>
+                            <td>{{selectedGrower.id}} - {{selectedGrower.farmName}} </td>
+                          </tr>
+                          <tr>
+                            <td>Vendor</td>
+                            <td>{{selectedVendor.vnumb}} - {{selectedVendor.vname}} </td>
+                          </tr>
+                        </table>
+
+                      </div>
+                      <div class="col-md-2" >
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="warn"
+                          (click)="resetSelection()"
+                        >
+                        <mat-icon>undo</mat-icon>
+                          Reset Choices
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display: table-row; margin-top: 30px; margin-bottom: 50px !important;">
+                    &nbsp;
+                  </div>
+
+
+
+                  <div style="display: table-row; margin-top: 30px;">
+                    <form [formGroup]="paymentRequestForm">
+
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-3">
+                          <div style="display: table" [formGroup]="paymentRequestForm">
+                            <mat-form-field appearance="outline" style="width: 250px;">
+                              <mat-label>Account</mat-label>
+                              <mat-select formControlName="Account" placeholder="Account" >
+                                <mat-option *ngFor="let account of accountList" [value]="account.id" >
+                                  {{account.accountType}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Amount</mat-label>
+                              <input type="text" currencyMask matInput placeholder="Amount" formControlName="Amount" (keyup)="onInvoiceTotalChange($event)" >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3" >
+                          <div style="display: table" [formGroup]="paymentRequestForm" >
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Send Check To (leave blank if Payee)</mat-label>
+                              <input type="text" formControlName="PayTo" matInput placeholder="Send Check To"  >
+
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Invoice Date</mat-label>
+                              <input  formControlName="InvoiceDate"  placeholder="Invoice Date"   matInput [matDatepicker]="invoiceDatePicker" />
+                              <mat-datepicker-toggle matSuffix [for]="invoiceDatePicker"></mat-datepicker-toggle>
+                              <mat-datepicker #invoiceDatePicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-3" >
+                          <div style="display: table" [formGroup]="paymentRequestForm" >
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Invoice #</mat-label>
+                              <input type="text" formControlName="InvoiceNumber" matInput placeholder="Invoice #"  >
+                              <mat-error *ngIf="!!paymentRequestForm.value.InvoiceNumber && paymentRequestForm.value.InvoiceNumber.toString().length > 23">Invoice number cannot be longer than 23 characters!</mat-error>
+
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-3">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline" style="width: 250px !important">
+                              <mat-label>Description </mat-label>
+                              <textarea matInput placeholder="Description"  formControlName="Description" rows="3"></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="row" style="margin-left: 10px;">
+                            <mat-checkbox (change)="onFileExemptChange($event)" formControlName="FileExempt">This invoice does not require a file</mat-checkbox>
+                          </div>
+
+                          Attach Invoice File
+                          <!-- <button
+                            mat-raised-button
+                            type="button"
+                            color="fdblue"
+                            (click)="attachFile()"
+                          >
+                            <mat-icon>cloud_upload</mat-icon>
+                            Select File
+                          </button> -->
+
+                          <p-fileUpload
+                          #fileInput
+                          name="myfile[]"
+
+                          (uploadHandler)="attachFile($event)"
+                          [auto]="true"
+                          customUpload="true"
+                          chooseLabel="Select Invoice File"
+                          [showCancelButton]="false"
+                          (onRemove)="onRemove($event)"
+                          [showUploadButton]="false"
+                          maxFileSize="2147483648"
+                          ></p-fileUpload>
+                        </div>
+
+                      </div>
+
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        &nbsp;
+                      </div>
+                      <div [hidden]="multipleGrowers" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <button
+                          mat-raised-button
+                          type="button"
+                          color="fdblue"
+                          (click)="enableMultipleGrowers()"
+                          [matTooltip]="'Distribute the invoice amount across multiple growers'"
+                          [matTooltipPosition]="'above'"
+                        >
+                          <mat-icon>playlist_add</mat-icon>
+                          Distribute to Multiple Growers
+                        </button>
+                      </div>
+
+                    </form>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="showForm && multipleGrowers" style="display: table-row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+              <p *ngIf="invoiceTotal.toString() !== distributionTotal.toString()">
+                Enter the Grower distributions
+                <span style="color: red; font-weight: bold">(total must add up to invoice amount and currently do not!)</span>
+
+              </p>
+              <p *ngIf="invoiceTotal.toString() === distributionTotal.toString()">
+                Enter the Grower distributions  (total must add up to invoice amount)
+              </p>
+              <div *ngIf="showForm && multipleGrowers" style="display: table-row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                <table [ngStyle]="{
+                  'color' : invoiceTotal.toString() !== distributionTotal.toString() ? 'red' : 'black',
+                  'font-weight' : invoiceTotal.toString() !== distributionTotal.toString() ? 'bold' : 'normal'
+                }">
+                  <tr>
+                    <td>Invoice Total</td>
+                    <td>{{ invoiceTotal | currency: 'USD' }}</td>
+                  </tr>
+                  <tr>
+                    <td>Distribution Total</td>
+                    <td>{{ distributionTotal | currency: 'USD' }}</td>
+                  </tr>
+                </table>
+
+                <button
+                  mat-raised-button
+                  type="button"
+                  color="fdblue"
+                  (click)="addDistribution()"
+                >
+                  <mat-icon>add</mat-icon>
+                  Add Grower Distribution
+                </button>
+              </div>
+
+              <div *ngIf="showForm" style="display: table-row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                <ag-grid-angular
+                  [ngStyle]="{ 'height.px' : '325', 'width.px' : innerWidth * 0.8 }"
+                  class="ag-theme-material"
+                  [rowData]="distributions"
+                  [columnDefs]="colDefs"
+                  [rowHeight]="45"
+                  (gridReady)="onGridReady($event)"
+                  (cellKeyDown)="onCellChange($event)"
+                  [singleClickEdit]="true"
+                  [stopEditingWhenGridLosesFocus]="true"
+                  (virtualRowRemoved)="virtualRowRemoved($event)"
+                  [frameworkComponents]="frameworkComponents"
+                  [suppressRowTransform]="true"
+                  [modules]="modules">
+                </ag-grid-angular>
+              </div>
+
+
+            </div>
+
+          </perfect-scrollbar>
+
+          <div *ngIf="showForm" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+            &nbsp;
+          </div>
+          <div *ngIf="showForm" class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+            <div class="col-md-12">
+              <div style="display: table">
+                <button
+                  mat-raised-button
+                  type="button"
+                  color="fdblue"
+                  [disabled]="!paymentRequestForm.valid || !farmVendorForm.valid || submittedPost || invoiceTotal === 0 || (multipleGrowers && invoiceTotal !== distributionTotal)"
+                  (click)="submitPaymentRequest(true)"
+                >
+                <!--
+
+                  [disabled]="!invoiceForm.valid || invoiceTotal === 0 || invoiceTotal !== distributionTotal || !!!voucher || submittedPost"
+
+[disabled]="!invoiceForm.valid || invoiceTotal === 0 || invoiceTotal !== distributionTotal"
+                -->
+                <mat-spinner
+                  *ngIf="submittedPost && !duplicateSubmission"
+                  [diameter]="35"
+                  style="float:right;"
+                ></mat-spinner>
+                  <mat-icon>send</mat-icon>
+                  Save and Return to List
+                </button>
+                <button
+                  style="margin-left: 15px;"
+                  mat-raised-button
+                  type="button"
+                  color="fdblue"
+                  [disabled]="!paymentRequestForm.valid || !farmVendorForm.valid || submittedPost || invoiceTotal === 0 || (multipleGrowers && invoiceTotal !== distributionTotal)"
+                  (click)="submitPaymentRequest(false)"
+                >
+                <mat-spinner
+                  *ngIf="submittedPost && duplicateSubmission"
+                  [diameter]="35"
+                  style="float:right;"
+                ></mat-spinner>
+                <mat-icon>add</mat-icon>
+                  Add New Request
+                </button>
+                <button
+                  style="margin-left: 15px;"
+                  mat-raised-button
+                  type="button"
+                  color="fdblue"
+                  [disabled]="!paymentRequestForm.valid || !farmVendorForm.valid || submittedPost || invoiceTotal === 0 || (multipleGrowers && invoiceTotal !== distributionTotal)"
+                  (click)="duplicateModal = true"
+                >
+                <mat-spinner
+                  *ngIf="duplicateSubmission"
+                  [diameter]="35"
+                  style="float:right;"
+                ></mat-spinner>
+                <mat-icon>content_copy</mat-icon>
+                  Duplicate
+                </button>
+                <button
+                  style="margin-left: 15px;"
+                  mat-raised-button
+                  type="button"
+                  color="warn"
+                  (click)="returnToList()"
+                >
+                <mat-icon>undo</mat-icon>
+                  Return to Batch
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="example-wrapper">
+    <kendo-dialog
+      *ngIf="duplicateModal"
+      (close)="duplicateModal = false"
+      [minWidth]="425"
+      [width]="425"
+      [height]="250"
+    >
+      <kendo-dialog-titlebar
+        style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+      >
+        <div
+          style="font-size: 18px; line-height: 1.3em; color: white !important;"
+        >
+          <span class="k-icon k-i-notification"></span> Duplicate Invoice Payment Request?
+        </div>
+      </kendo-dialog-titlebar>
+      <p>&nbsp;</p>
+      <span style="margin-top: 50px !important">Do you wish to submit this invoice payment request and create a duplicate with the same information?</span>
+
+
+
+      <kendo-dialog-actions>
+        <button
+        mat-raised-button
+        color="warn"
+        style="width: 50% !important;"
+        (click)="duplicateModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="submittedPost"
+        style="width: 50% !important;"
+        (click)="submitPaymentRequest(false)"
+      >
+        <mat-spinner
+          *ngIf="submittedPost"
+          [diameter]="35"
+          style="float:right;"
+        ></mat-spinner>
+        Yes, Duplicate
+      </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+  </div>

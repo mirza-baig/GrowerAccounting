@@ -1,0 +1,55 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                Reset Breeder Settlements
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  
+                    <div style="display: table-row">
+                      This page is for resetting the numbers for breeder settlements.
+                    </div>    
+                    <div style="display: table-row">
+                      <button 
+                        mat-raised-button
+                        [disabled]="lock"
+                        type="button"
+                        color="fdblue" 
+                        (click)="resetBreeders()"
+                        [matTooltip]="'Click to reset the breeder counts for the new calendar year'"
+                        [matTooltipPosition]="'above'"
+                      >
+                      <mat-spinner
+                        *ngIf="lock"
+                        [diameter]="35"
+                        style="float:right;"
+                      ></mat-spinner>
+                      <mat-icon>refresh</mat-icon>
+                        Reset Breeder Balances
+                      </button>
+                    </div>    
+                    
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

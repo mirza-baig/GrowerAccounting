@@ -1,0 +1,6 @@
+
+<form [formGroup]="valueForm">
+  <mat-form-field appearance="outline">
+    <input type="text" #valueInput currencyMask matInput  [formGroup]="valueForm"  formControlName="Value" >
+  </mat-form-field>  
+</form>

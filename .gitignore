@@ -1,0 +1,60 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/dist_test
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+src/app/project/project.component - Old.html
+src/app/project/upload-documentation/upload-documentation.component - Old.ts
+src/app/project/project.component - Old.ts
+src/app/project/approvers/approvers.component - Old.html
+src/app/project/approvers/approvers.component - Old.ts
+src/app/project/budget-info/budget-info.component - Old.html
+src/app/project/budget-info/budget-info.component - Old.ts
+src/app/project/costs/costs.component - Old.html
+src/app/project/costs/costs.component - Old.ts
+src/app/project/financial-info/financial-info.component - Old.html
+src/app/project/financial-info/financial-info.component - Old.ts
+src/app/project/financial-summary/financial-summary.component - Old.html
+src/app/project/financial-summary/financial-summary.component - Old.ts
+src/app/project/project-approval/project-approval.component - Old.html
+src/app/project/project-approval/project-approval.component - Old.ts
+src/app/project/project-review/project-review.component - Old.html
+src/app/project/project-review/project-review.component - Old.ts
+src/app/project/quote-evaluation/quote-evaluation.component - Old.html
+src/app/project/quote-evaluation/quote-evaluation.component - Old.ts
+src/app/project/upload-documentation/upload-documentation.component - Old.html

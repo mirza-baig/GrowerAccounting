@@ -1,0 +1,31 @@
+<!--New-->
+<div *ngIf="!!params.data">
+  <span *ngIf="!!params.data.invoice.fileName">
+    <button
+      mat-raised-button
+      [disabled]="postSubmitted || !displayFileReady"
+      type="button"
+      color="fdblue"
+      (click)="getFileEvent()"
+
+    >
+    <!--
+      [matTooltip]="'View the payment request file ' + params.data.invoice.fileName"
+      [matTooltipPosition]="'above'"
+    -->
+    <mat-spinner
+      *ngIf="postSubmitted || !displayFileReady"
+      [diameter]="35"
+      style="float:right;"
+    ></mat-spinner>
+    <mat-icon>cloud_download</mat-icon>
+      View File
+    </button>
+
+  </span>
+  <span *ngIf="!!!params.data.invoice.fileName">
+    <b>No file included</b>
+  </span>
+
+
+</div>

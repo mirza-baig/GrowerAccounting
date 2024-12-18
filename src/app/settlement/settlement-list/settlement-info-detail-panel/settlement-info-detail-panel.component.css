@@ -1,0 +1,28 @@
+.rowLabel {
+    font-weight: bold;
+}
+/* div {
+    overflow-x: hidden; 
+    overflow-y: scroll; 
+} */
+
+.editableGridCell {
+    background-color: #f9ffe1;
+    border: 5;
+}
+.normalGridCell {
+    color: blue;
+    background-color: pink;
+}
+
+
+
+
+::ng-deep.k-dialog {
+    z-index: 99999 !important;
+}
+::ng-deep.k-dialog-titlebar {
+    z-index: 99999 !important;
+}
+
+

@@ -1,0 +1,122 @@
+
+<span *ngIf="!params.data.isFileViewed" style="color: red">  
+  <mat-icon style="color: black !important; cursor: pointer;" (click)="detailModal = true">search</mat-icon>
+  View File First
+</span>
+
+<form [formGroup]="commentsForm">
+  <mat-icon style="color: black !important; cursor: pointer;" (click)="detailModal = true">search</mat-icon>
+  <mat-radio-group
+    
+    formControlName="Action"
+    *ngIf="!!commentsForm && params.data.isFileViewed"
+    style="margin-left: 15px;"
+    (change)="changeApprovalEvent($event)"
+  >
+    <mat-radio-button value="Approved">
+      <!-- 1&nbsp; -->
+      <mat-icon style="color:green; padding-top: 15px !important;">check</mat-icon>
+    </mat-radio-button>
+    <mat-radio-button value="Rejected"><!--todo - change this based on the stage-->
+      <mat-icon style="color: red; padding-top: 15px !important;">close</mat-icon>
+    </mat-radio-button>
+  </mat-radio-group>
+
+</form>
+
+
+
+
+
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="commentsModal"
+    (close)="cancelRejectComments()"
+    [minWidth]="425"
+    [width]="425"
+    [height]="325"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> Comments Required
+      </div>
+    </kendo-dialog-titlebar>
+    <p>&nbsp;</p>
+    <span style="margin-top: 50px !important">Comments are required for rejected invoice payment requests!</span>
+    <form [formGroup]="commentsForm">
+      <div class="row" style="margin-top: 10px;">                          
+        
+        <div style="display: table;" *ngIf="!!commentsForm" [formGroup]="commentsForm" >
+          <mat-form-field appearance="outline" style="width: 350px;">
+            <mat-label>Comments</mat-label>
+            <textarea matInput placeholder="Comments" formControlName="Comments" rows="5" ></textarea>
+          </mat-form-field>  
+        </div>
+        
+      </div>
+    </form>
+    
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="warn"
+      style="width: 50% !important;"
+      (click)="cancelRejectComments()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!commentsForm.valid"
+      style="width: 50% !important;"
+      (click)="confirmRejectComments()"
+    >
+      Yes, Confirm Rejection
+    </button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>
+
+
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="detailModal"
+    (close)="detailModal = false"
+    [minWidth]="425"
+    [width]="innerWidth * 0.55"
+    [height]="innerHeight * 0.5"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> Invoice Payment Request Details
+      </div>
+    </kendo-dialog-titlebar>
+    <p>&nbsp;</p>
+    <app-invoice-payment-request-view-panel
+      [id]="params.data.invoice.id"
+    >
+    </app-invoice-payment-request-view-panel>
+    <!-- render me here-->
+    
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="primary"
+      style="width: 100% !important;"
+      (click)="detailModal = false"
+    >
+      Close
+    </button>
+    
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>

@@ -1,0 +1,60 @@
+<!--New-->
+<span *ngIf="params.data.stage === 'New'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit this invoice payment request batch'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>edit</mat-icon>
+  </button>
+  <!-- <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatchModal = true"
+    [matTooltip]="'Delete this settlement batch'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>delete</mat-icon>
+    Delete
+  </button> -->
+</span>
+<span *ngIf="params.data.stage !== 'New'">
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'View this invoice payment request batch'"
+    [matTooltipPosition]="'above'"
+
+  >
+  <mat-icon>visibility</mat-icon>
+  </button>
+  <!-- <button
+    style="margin-left: 15px;"
+    mat-raised-button
+    type="button"
+    color="warn"
+    (click)="deleteBatchModal = true"
+    [matTooltip]="'Delete this settlement batch'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>delete</mat-icon>
+    Delete
+  </button> -->
+</span>
+
+<!--In Process-->
+
+<!--
+todo - add next stages
+LPO Approved
+Approved (Accounting Approved)
+Posted
+-->

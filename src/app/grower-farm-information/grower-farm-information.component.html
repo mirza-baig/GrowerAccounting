@@ -1,0 +1,84 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- <mat-card class="wrap">
+      <mat-card-header>
+        <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+      </mat-card-header>
+    </mat-card> -->
+
+    <div class="col-md-12" style="margin-top:3px;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row" style="width: 100%;">
+            <p class="page-title">
+              {{pageTitle}}
+            </p>
+          </div>
+          <div class="row" style="width: 100%;">
+            <div class="col-xl-12">
+              <div style="display: table">
+                <!--Loading gif-->
+                <div *ngIf="loadingAccount" style="display: table-row">
+                  Please wait while your account information loads
+                  <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }"
+                                    mode="indeterminate"></mat-progress-bar>
+                </div>
+
+                <!--acount header info-->
+                <div *ngIf="!loadingAccount" style="display: table-row">
+                  <app-grower-account-header [id]="growerId"></app-grower-account-header>
+                  <hr>
+                  <app-grower-account-detail [growerId]="growerId" [innerWidth]="innerWidth"></app-grower-account-detail>
+                  <!--<div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       Last Settlement Date:
+                     </div>
+                   </div>
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       {{grower.lastSettlementDate | date: 'MM/dd/yyyy' }}
+                     </div>
+                   </div>
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       Total YTD Interest Charged:
+                     </div>
+                   </div>
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       {{ grower.ytdinterestCharged | currency: 'USD':'$':'0.0-0' }}
+                     </div>
+                   </div>
+                 </div>
+                 <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       Last Statement Date:
+                     </div>
+                   </div>
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       {{grower.lastStatementDate | date: 'MM/dd/yyyy' }}
+                     </div>
+                   </div>
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       Total YTD Interest Paid:
+                     </div>
+                   </div>
+                   <div class="col-lg-3 col-md-6 col-sm-12">
+                     <div style="display: table">
+                       {{ grower.ytdinterestPaid | currency: 'USD':'$':'0.0-0' }}
+                     </div>
+                   </div>
+                 </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

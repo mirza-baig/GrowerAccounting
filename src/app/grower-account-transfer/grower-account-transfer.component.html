@@ -1,0 +1,115 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!--Loading gif-->
+                  <div *ngIf="!dropdownsLoaded || !formLoaded" style="display: table-row">
+                    Please wait while the account information loads
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>
+
+
+                  <!--Main Form-->
+                  <div  *ngIf="dropdownsLoaded && formLoaded" style="display: table-row; margin-top: 50px;">
+                    <form [formGroup]="transferForm">
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-2">
+                          <div style="display: table" [formGroup]="transferForm" >
+                            <mat-form-field appearance="outline">
+                              <mat-label>From Account</mat-label>
+                              <mat-select formControlName="FromAccount" placeholder="From Account" >
+                                <mat-option *ngFor="let item of fromAccountList" [value]="item.AccountSuffix" >
+                                  {{ item.AccountSuffix }} - {{item.AccountType}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-2">
+                          <div style="display: table" [formGroup]="transferForm" >
+                            <mat-form-field appearance="outline">
+                              <mat-label>From Account</mat-label>
+                              <mat-select formControlName="ToAccount" placeholder="To Account" >
+                                <mat-option *ngFor="let item of toAccountList" [value]="item.AccountSuffix" >
+                                  {{ item.AccountSuffix }} - {{item.AccountType}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-2">
+                          <div style="display: table">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Date</mat-label>
+                              <input name="Date"  placeholder="Date"   matInput [matDatepicker]="picker"  (dateChange)="onDateChange($event)"  />
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-2">
+                          <div style="display: table" [formGroup]="transferForm" >
+                            <mat-form-field appearance="outline">
+                              <mat-label>Description</mat-label>
+                              <input type="text" name="Description" matInput placeholder="Description" formControlName="Description" value="" >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" [ngStyle]="{'width.px' : innerWidth * 0.95 }">
+                        <div class="col-md-2">
+                          <!--[formGroup]="transactionForm"-->
+                          <div style="display: table"  >
+                            <mat-form-field appearance="outline">
+                              <mat-label>Amount</mat-label>
+                              <input type="text" currencyMask matInput placeholder="Amount" formControlName="Amount"  >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div *ngIf="dropdownsLoaded && formLoaded" style="display: table-row; margin-top: 30px;">
+                    <!--(click)="submitForm()"-->
+                    <button
+                      mat-raised-button
+                      type="button"
+                      color="fdblue"
+                      appDisabledForRole="Grower Accounting Read Only"
+                    >
+                    <mat-icon>save</mat-icon>
+                      Submit
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

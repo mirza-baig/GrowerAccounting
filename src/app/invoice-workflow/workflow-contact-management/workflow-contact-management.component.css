@@ -1,0 +1,10 @@
+
+
+::ng-deep.k-dialog {
+    z-index: 99999 !important;
+}
+::ng-deep.k-dialog-titlebar {
+    z-index: 99999 !important;
+}
+
+

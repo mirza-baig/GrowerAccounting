@@ -1,0 +1,33 @@
+<!--New-->
+<!-- <span *ngIf="params.data.status === 'New'"> -->
+<span >
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    *ngIf="params.data.invoice.stage !=='Exported'"
+  >
+  <mat-icon>edit</mat-icon>
+    Review
+  </button>
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="goToView()"
+    *ngIf="params.data.invoice.stage ==='Exported'"
+    [matTooltip]="'View'"
+  >
+  <mat-icon>visibility</mat-icon>
+  </button>
+</span>
+
+<!--In Process-->
+
+<!--
+todo - add next stages
+LPO Approved
+Approved (Accounting Approved)
+Posted
+-->

@@ -1,0 +1,27 @@
+<span>
+  <!--Todo - eventually get this to not break the loading of the page-->
+  <!-- <button 
+    mat-raised-button
+    style="width: 80px;"
+    type="button"
+    color="fdblue" 
+    (click)="goToEdit()"
+    [matTooltip]="'Edit the grower record for ' + params.data.growerName"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>edit</mat-icon>
+    Edit
+  </button> -->
+  <button 
+    mat-raised-button
+    style="width: 100px;"
+    type="button"
+    color="fdblue" 
+    (click)="deleteConfirm()"
+    [matTooltip]="'Delete the relation to grower ' + params.data.growerName"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>clear</mat-icon>
+    Delete
+  </button>
+</span>

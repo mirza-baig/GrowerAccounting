@@ -1,0 +1,220 @@
+
+  <!--show the header-->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- <mat-card class="wrap">
+        <mat-card-header>
+          <capx-header [moduleTitle]="this.pageTitle"></capx-header>
+        </mat-card-header>
+      </mat-card> -->
+  
+      <div class="col-md-12" style="margin-top:3px;">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row" style="width: 100%;">
+              <p class="page-title">
+                {{pageTitle}}
+              </p>
+            </div>
+            <div class="row" style="width: 100%;">
+              <div class="col-xl-12">
+                <div style="display: table">
+                  <!-- <app-week-ending-date-picker
+                    [inputDate]="null"
+                    [submitButtonText]="'Load Settlements for Date'"
+                    (dateSelectedEvent)="onDateSelected($event)"
+                  >
+                  </app-week-ending-date-picker> -->
+                  
+                  <!-- <app-grower-selection-panel
+                    [widthpx]="innerWidth * 0.9"
+                    [heightpx]="400"
+                    [startingId]="0"
+                    (growerSelectedEvent)="onGrowerSelected($event)"
+                  > 
+                  </app-grower-selection-panel> -->
+
+                  <!--Loading gif-->
+                  <div *ngIf="!settlementsLoaded" style="display: table-row">
+                    Please wait while the settlements load
+                    <mat-progress-bar [ngStyle]="{'width.px' : innerWidth * 0.95 }" mode="indeterminate"></mat-progress-bar>
+                  </div>        
+                                     
+
+                  <div *ngIf="settlementsLoaded" style="display: table-row">
+                    <p *ngIf="!posted">
+                      Please verify the Settlement Calculations below by
+                      clicking the <mat-icon>chevron_right</mat-icon> arrow. To transfer funds between settlements 
+                      click on the checkboxes to select related settlements.
+                    </p>
+                    <p *ngIf="posted">
+                      This Settlement Batch has been posted so it can only be viewed and not edited.
+                    </p>
+                  </div>
+                  
+                  <!--Action Buttons-->
+                  <div *ngIf="settlementsLoaded" style="display: table-row">
+                    <button
+                      mat-raised-button
+                      *ngIf="!posted"
+                      color="primary"
+                      [disabled]="!enableTransfer"
+                      (click)="addTransfer()"
+                    >
+                      <mat-icon>swap_horiz</mat-icon>
+                      Transfer Funds Between Settlements
+                    </button>
+                    <button
+                      [ngStyle]="{ 'margin-left' : posted ? '0px' : '15px'}"
+                      mat-raised-button
+                      type="button"
+                      color="warn"
+                      (click)="returnToList()"
+                    >
+                      <mat-icon>undo</mat-icon>
+                      Return to Settlement List
+                    </button>
+                  </div>
+
+                  <!--Settlement list -->
+                  <div *ngIf="settlementsLoaded" style="display: table-row" >
+                    <ag-grid-angular 
+                      #agGrid 
+                      [ngStyle]="{'width.px':innerWidth * 0.93, 'height.px': innerHeight - 210 }"
+                      class="ag-theme-material"
+                      [rowData]="settlementList" 
+                      [columnDefs]="columnDefs"
+                      [rowHeight]="rowHeight"
+                      [masterDetail]="true"
+                      [frameworkComponents]="frameworkComponents"
+                      [rowHeight]="45"
+                      (gridReady)="onGridReady($event)"
+                      [floatingFilter]="true"
+                      [getRowHeight]="getRowHeight"
+                      [rowSelection]="selectMode"
+                      (selectionChanged)="onSettlementSelectionChanged($event)"
+                      [detailCellRenderer]="detailCellRenderer"
+                      [embedFullWidthRows]="true"
+                      [suppressHorizontalScroll]="true"
+                      [animateRows]="true"
+                      [suppressRowClickSelection]="true"
+                      (cellValueChanged)="netValueChanged($event)"
+                      
+                      
+                      (firstDataRendered)="onFirstDataRendered($event)"
+                      [modules]="modules">
+                    </ag-grid-angular>
+                    <!-- 
+                      [isRowSelectable]="isRowSelectable" 
+                      [getRowClass]="getSettlementRowClass"
+                    -->
+                  </div>  
+                  <div *ngIf= "settlementsLoaded" style="display: table-row; margin-bottom: 30px;">
+                    
+                  </div>      
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+  <div class="example-wrapper">
+    <kendo-dialog
+      *ngIf="addTransferModal"
+      (close)="addTransferModal = false"
+      [width]="innerWidth * 0.5"
+      [height]="innerHeight * 0.5"
+    >
+      <kendo-dialog-titlebar
+        style="background-color: RGB(0, 74, 138); color: white; font-size: 18px; z-index: 999999 !important;"
+      >
+        <div
+          style="font-size: 18px; line-height: 1.3em; color: white !important;"
+        >
+          <span class="k-icon k-i-notification"></span> Settlement Transfer
+        </div>
+      </kendo-dialog-titlebar>
+      <p style="z-index: 999999 !important; margin-top: 20px;">
+        You have selected to transfer funds from {{toSettlement.entity + ' - ' + toSettlement.growerName }} to {{fromSettlement.entity + ' - ' + fromSettlement.growerName }}
+      </p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="reverseTransfer()"
+      >
+        Click to reverse
+      </button>
+
+      <table [ngStyle]="{ 'width.px' : innerWidth * 0.25, 'margin-bottom' : '30px;' }">
+        <tr>
+          <th></th>
+          <th>Entity</th>
+          <th>Grower</th>
+          <th>Original</th>
+          <th>Diff</th>
+          <th>Revised</th>
+        </tr>
+        <tr>
+          <td>From</td>
+          <td>{{fromSettlement.entity}}</td>
+          <td>{{fromSettlement.growerName}}</td>
+          <td>{{fromSettlement.settlementAmount | currency: 'USD' }}</td>
+          <td style="color: red">{{transferAmount * -1 | currency: 'USD' }}</td>
+          <td>{{fromRevised | currency: 'USD' }}</td>
+        </tr>
+        <tr>
+          <td>To</td>
+          <td>{{toSettlement.entity}}</td>
+          <td>{{toSettlement.growerName}}</td>
+          <td>{{toSettlement.settlementAmount | currency: 'USD' }}</td>
+          <td style="color: green">{{transferAmount | currency: 'USD' }}</td>
+          <td>{{toRevised | currency: 'USD' }}</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>          
+        </tr>
+      </table>
+
+      <form [formGroup]="transferForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Transfer Amount</mat-label>
+          <input type="text" currencyMask matInput placeholder="Transfer Amount" formControlName="Amount" (keyup)="onTransferAmountChange($event)" >
+        </mat-form-field>  
+      </form>
+
+     
+      <kendo-dialog-actions>
+        <button
+        mat-raised-button
+        color="warn"
+        style="width: 50% !important; z-index: 999999 !important;"
+        (click)="addTransferModal = false"
+      >
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="blockTransferSubmit"
+        style="width: 50% !important; z-index: 999999 !important;"
+        (click)="submitTransfer()"
+      >
+        Transfer Funds
+      </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+  </div>

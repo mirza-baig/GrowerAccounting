@@ -1,0 +1,28 @@
+<span style="width: 250px;">
+  <button
+    mat-raised-button
+    style="width: 80px;"
+    type="button"
+    color="fdblue"
+    (click)="goToEdit()"
+    [matTooltip]="'Edit bank note #' + params.data.noteLoanNumber"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>edit</mat-icon>
+  </button>
+  <button
+    mat-raised-button
+    type="button"
+    style="width: 120px;"
+    color="fdred"
+    (click)="deleteBankNote()"
+    [matTooltip]="'Delete this bank note'"
+    [matTooltipPosition]="'above'"
+    appDisabledForRole="Grower Accounting Read Only"
+  >
+  <mat-icon>delete</mat-icon>
+  </button>
+</span>
+
+<!--todo should we delete bank notes?-->

@@ -1,0 +1,48 @@
+<span>
+  <button
+    mat-raised-button
+    type="button"
+    color="fdblue"
+    (click)="openModal()"
+    [matTooltip]="'View the full details of the invoice'"
+    [matTooltipPosition]="'above'"
+  >
+  <mat-icon>visibility</mat-icon>
+  </button>
+</span>
+
+<div class="example-wrapper">
+  <kendo-dialog
+    *ngIf="detailModal"
+    (close)="detailModal = false"
+    [minWidth]="425"
+    [width]="1000"
+    [height]="1000"
+  >
+    <kendo-dialog-titlebar
+      style="background-color: RGB(0, 74, 138); color: white; font-size: 18px;"
+    >
+      <div
+        style="font-size: 18px; line-height: 1.3em; color: white !important;"
+      >
+        <span class="k-icon k-i-notification"></span> Invoice Details
+      </div>
+    </kendo-dialog-titlebar>
+    <p>&nbsp;</p>
+    <app-view-invoice-full-panel [id]="params.value"></app-view-invoice-full-panel>
+    <!-- render me here-->
+
+    <kendo-dialog-actions>
+      <button
+      mat-raised-button
+      color="primary"
+      style="width: 100% !important;"
+      (click)="detailModal = false"
+    >
+      Close
+    </button>
+
+    </kendo-dialog-actions>
+  </kendo-dialog>
+</div>
+

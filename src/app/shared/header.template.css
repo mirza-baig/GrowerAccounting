@@ -1,0 +1,19 @@
+/*
+::ng-deep.mat-tab-label{
+    min-width: 0!important;
+    padding: 3px!important;
+    margin: 3px!important;
+} */
+
+.help-tab {
+  position: absolute;
+  right: 40px;
+}
+::ng-deep.help-tab mat-ink-bar {
+  visibility: hidden !important;
+}
+
+::ng-deep.mat-menu-panel.help-menu {
+  max-width: 1000px;
+  width: 500px !important;
+}
